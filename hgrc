@@ -1,0 +1,15 @@
+[ui]
+#username = Sebastien Wacquiez <sw@enix.org>
+username = Emmanuel Leveque <90655@supinfo.com>
+editor = vim
+merge = meld
+[extensions]
+graphlog =
+hgext.extdiff =
+purge =
+color =
+
+
+[extdiff]
+cmd.vimdiff =
+
