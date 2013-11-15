@@ -73,7 +73,9 @@ function truncate_pwd
             # START #
             #########
 
-xrdb ~/.Xdefault
+if hash xrdb 2>/dev/null; then
+    xrdb ~/.Xdefault
+fi
 #command fortune | cowsay -f tux
 echo -e $PURPLE $(cat ~/.reminder)
 export PATH=$PATH:~/script
