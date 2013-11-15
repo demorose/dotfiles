@@ -133,9 +133,6 @@ trap 'echo -ne "$Color_Off"' DEBUG
 #     CONNECTIONS
 alias ssh="ssh -A"
 alias demoroot='ssh root@demorose.me'
-alias ephemere='smbclient //10.14.40.2/Ephemere'
-alias Mntephemere='sudo mount -t cifs //10.14.40.2/Ephemere /share/ephemere'
-alias algoTunnel="sudo ssh root@demorose.me -L 443:94.23.17.178:27060 -N -i /home/demorose/.ssh/id_dsa"
 
 #      UTILITIES
 alias ls="ls --color=auto"

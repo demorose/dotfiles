@@ -16,7 +16,9 @@ ln -s $SCRIPTPATH/vimrc ~/.vimrc
 ln -s $SCRIPTPATH/hgrc ~/.hgrc
 ln -s $SCRIPTPATH/Xdefault ~/.Xdefault
 source ~/.bashrc
-xrdb ~/.Xdefault
+if hash xrdb 2>/dev/null; then
+    xrdb ~/.Xdefault
+fi
 # Install pathogen
 mkdir -p ~/.vim/autoload ~/.vim/bundle; \
 curl -Sso ~/.vim/autoload/pathogen.vim \
