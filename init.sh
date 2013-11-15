@@ -1,14 +1,55 @@
 #!/bin/bash
 # -*- coding: utf-8 -*-
 
+pushd `dirname $0` > /dev/null
+SCRIPTPATH=`pwd -P`
+popd > /dev/null
+
+touch ~/.reminder
+mkdir -p ~/.vim/swap
 rm ~/.bashrc
 rm ~/.vimrc
 rm ~/.hgrc
 rm ~/.Xdefault
-ln -s ~/userfiles/bashrc ~/.bashrc
-ln -s ~/userfiles/vimrc ~/.vimrc
-ln -s ~/userfiles/hgrc ~/.hgrc
-ln -s ~/userfiles/Xdefault ~/.Xdefault
-ln -s ~/userfiles/vim ~/.vim
+ln -s $SCRIPTPATH/bashrc ~/.bashrc
+ln -s $SCRIPTPATH/vimrc ~/.vimrc
+ln -s $SCRIPTPATH/hgrc ~/.hgrc
+ln -s $SCRIPTPATH/Xdefault ~/.Xdefault
 source ~/.bashrc
 xrdb ~/.Xdefault
+# Install pathogen
+mkdir -p ~/.vim/autoload ~/.vim/bundle; \
+curl -Sso ~/.vim/autoload/pathogen.vim \
+    https://raw.github.com/tpope/vim-pathogen/master/autoload/pathogen.vim
+
+cd ~/.vim/bundle
+
+# Install nerdtree
+if [ ! -d ./nerdtree ]; then
+    git clone https://github.com/scrooloose/nerdtree.git
+fi
+# Install nerdtree-tabs
+if [ ! -d ./vim-nerdtree-tabs ]; then
+    git clone https://github.com/jistr/vim-nerdtree-tabs.git
+fi
+# Install vim-javascript
+if [ ! -d ./vim-javascript ]; then
+    git clone https://github.com/pangloss/vim-javascript.git
+fi
+# Install syntastic
+if [ ! -d ./syntastic ]; then
+    git clone https://github.com/scrooloose/syntastic.git
+fi
+# Snipmate
+if [ ! -d ./tlib_vim ]; then
+    git clone https://github.com/tomtom/tlib_vim.git
+fi
+if [ ! -d ./vim-addon-mw-utils ]; then
+    git clone https://github.com/MarcWeber/vim-addon-mw-utils.git
+fi
+if [ ! -d ./vim-snipmate ]; then
+    git clone https://github.com/garbas/vim-snipmate.git
+fi
+if [ ! -d ./vim-snippets ]; then
+    git clone https://github.com/honza/vim-snippets.git
+fi
