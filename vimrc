@@ -199,9 +199,6 @@ filetype plugin on
 "toggle number
 :nmap <F2> :set nu!<CR>
 
-"toggle TagBar
-nmap <F8> :TagbarToggle<CR>
-
 "toggle Tree
 nmap <F6> :NERDTreeTabsToggle<CR>
 nmap <F7> :NERDTreeFind<CR>
@@ -215,9 +212,5 @@ set directory=~/.vim/swap
 :let mapleader = ","
 
 map <F3> :nohl <CR>
-
-function! ApAbstractClass()
-    r~/.vim/template/jsClass.js
-endfunction
 
 cmap w!! w !sudo tee >/dev/null %
