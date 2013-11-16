@@ -38,6 +38,10 @@ fi
 if [ ! -d ./vim-javascript ]; then
     git clone https://github.com/pangloss/vim-javascript.git
 fi
+# Install vim-javascript-syntax
+if [ ! -d ./vim-javascript-syntax ]; then
+    git clone https://github.com/jelera/vim-javascript-syntax.git
+fi
 # Install syntastic
 if [ ! -d ./syntastic ]; then
     git clone https://github.com/scrooloose/syntastic.git
