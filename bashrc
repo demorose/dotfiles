@@ -4,6 +4,11 @@ if [[ $- != *i* ]] ; then
 	return
 fi
 
+case "$TERM" in
+    rxvt-256color)
+        TERM=rxvt-unicode
+        ;;
+esac
             #############
             # Set COLOR #
             #############
