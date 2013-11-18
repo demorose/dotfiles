@@ -5,6 +5,9 @@ if [[ $- != *i* ]] ; then
 fi
 
 case "$TERM" in
+    rxvt-unicode-256color)
+        TERM=rxvt-unicode
+        ;;
     rxvt-256color)
         TERM=rxvt-unicode
         ;;
