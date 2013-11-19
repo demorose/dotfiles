@@ -218,3 +218,4 @@ set directory=~/.vim/swap
 map <F3> :nohl <CR>
 
 cmap w!! w !sudo tee >/dev/null %
+highlight clear SignColumn

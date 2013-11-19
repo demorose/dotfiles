@@ -59,3 +59,6 @@ fi
 if [ ! -d ./vim-snippets ]; then
     git clone https://github.com/honza/vim-snippets.git
 fi
+if [ ! -d ./vim-gitgutter ]; then
+    git clone git://github.com/airblade/vim-gitgutter.git
+fi
