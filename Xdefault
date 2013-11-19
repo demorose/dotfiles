@@ -27,7 +27,7 @@ URxvt.colorBD:           white
 !Pour ne pas avoir de bordures
 !URxvt*borderLess:            true
 !Pour avoir le marquage des urls et les ouvrir avec FF
-URxvt.perl-ext-common: default,matcher
+URxvt.perl-ext-common: default,matcher,tabbed,vtwheel
 URxvt.urlLauncher: chromium
 URxvt.matcher.button: 2
 URxvt.tabbed.tabbar-fg: 2
