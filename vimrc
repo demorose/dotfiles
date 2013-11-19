@@ -193,6 +193,10 @@ call pathogen#infect()
 call pathogen#incubate()
 
 "Perso
+
+" Open NERDTree at startup
+let g:nerdtree_tabs_open_on_console_startup=1
+
 autocmd BufWritePre * :%s/\s\+$//e
 
 filetype plugin on
