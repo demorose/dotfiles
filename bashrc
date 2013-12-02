@@ -140,7 +140,6 @@ trap 'echo -ne "$Color_Off"' DEBUG
 
 #     CONNECTIONS
 alias ssh="ssh -A"
-alias demoroot='ssh root@demorose.me'
 
 #      UTILITIES
 alias ls="ls --color=auto"
