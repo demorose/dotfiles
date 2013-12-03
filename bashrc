@@ -204,3 +204,7 @@ setBacklight() {
         echo $1 > $k_lvl
     fi
 }
+
+function ssh_tmux() {
+    ssh -A -t "$1" tmux a || ssh -A -t "$1" tmux;
+}
