@@ -219,3 +219,4 @@ map <F3> :nohl <CR>
 
 cmap w!! w !sudo tee >/dev/null %
 highlight clear SignColumn
+set clipboard=unnamedplus

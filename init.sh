@@ -7,13 +7,11 @@ popd > /dev/null
 
 touch ~/.reminder
 mkdir -p ~/.vim/swap
-rm ~/.bashrc
-rm ~/.vimrc
-rm ~/.hgrc
-rm ~/.Xdefault
+mv ~/.bashrc ~/.bashrc.back
+mv ~/.vimrc ~/.vimrc.back
+mv ~/.Xdefault ~/.Xdefault.back
 ln -s $SCRIPTPATH/bashrc ~/.bashrc
 ln -s $SCRIPTPATH/vimrc ~/.vimrc
-ln -s $SCRIPTPATH/hgrc ~/.hgrc
 ln -s $SCRIPTPATH/Xdefault ~/.Xdefault
 source ~/.bashrc
 if hash xrdb 2>/dev/null; then
