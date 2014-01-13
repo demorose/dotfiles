@@ -219,4 +219,16 @@ map <F3> :nohl <CR>
 
 cmap w!! w !sudo tee >/dev/null %
 highlight clear SignColumn
+
 set clipboard=unnamedplus
+
+" Make naughty characters visible...
+" (uBB is right double angle, uB7 is middle dot)
+exec "set lcs=tab:\uBB\uBB,trail:\uB7,nbsp:~"
+augroup VisibleNaughtiness
+    autocmd!
+    autocmd BufEnter  *       set list
+    autocmd BufEnter  *       if !&modifiable
+    autocmd BufEnter  *           set nolist
+    autocmd BufEnter  *       endif
+augroup END

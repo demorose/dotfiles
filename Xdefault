@@ -12,7 +12,7 @@ URxvt.reverseVideo:          false
 URxvt.tintColor:             #ffffff
 URxvt.shading:               100             !trans=100, 0=opaque
 URxvt.fading:                30              !term unfocus
-URxvt.font:                  xft:monospace:pixelsize=13
+URxvt.font:                  xft:monospace:pixelsize=11
 URxvt.boldFont:                      9x15bold,xft:Bitstream Vera Sans Mono
 URxvt.scrollTtyKeypress:             true
 URxvt.scrollBar:             true
@@ -34,7 +34,7 @@ URxvt.tabbed.tabbar-fg: 2
 URxvt.tabbed.tabbar-bg: 8
 URxvt.tabbed.tab-fg:    3
 URxvt.tabbed.tab-bg:    8
-! Pour ouvrir les URL avec le clic gauche de la souris. (1 = Clic gauche, 2 = Clic molette, 3 = Clic droit)
+
 #define S_base03        #002b36
 #define S_base02        #073642
 #define S_base01        #586e75
