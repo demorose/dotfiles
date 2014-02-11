@@ -189,17 +189,37 @@ autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
 
-call pathogen#infect()
-call pathogen#incubate()
-
 "Perso
+
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+Bundle 'gmarik/vundle'
+Bundle 'scrooloose/syntastic'
+Bundle 'scrooloose/nerdtree'
+Bundle 'jistr/vim-nerdtree-tabs'
+Bundle 'tpope/vim-surround'
+Bundle 'kien/ctrlp.vim'
+
+Bundle 'msanders/snipmate.vim'
+
+Bundle 'maksimr/vim-jsbeautify'
+Bundle 'einars/js-beautify'
+Bundle 'jelera/vim-javascript-syntax'
+Bundle 'pangloss/vim-javascript'
+
+Bundle 'StanAngeloff/php.vim'
+
+filetype off
+filetype plugin indent on
+
 
 " Open NERDTree at startup
 let g:nerdtree_tabs_open_on_console_startup=1
 
+" Remove trailing space when saving
 autocmd BufWritePre * :%s/\s\+$//e
 
-filetype plugin on
 "toggle number
 :nmap <F2> :set nu!<CR>
 
@@ -213,12 +233,8 @@ map <F4> :execute "noautocmd vimgrep /" . expand("<cword>") . "/j **/*" . expand
 "set swap directory
 set directory=~/.vim/swap
 
-:let mapleader = ","
-
+"Remove highlight with F3
 map <F3> :nohl <CR>
-
-cmap w!! w !sudo tee >/dev/null %
-highlight clear SignColumn
 
 set clipboard=unnamedplus
 
