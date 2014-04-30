@@ -1,3 +1,6 @@
+" 256 colors
+set t_Co=256
+
 "n de défauts bien pratiques (à garder en début de fichier)
 set nocompatible
 
@@ -88,8 +91,8 @@ set expandtab
 " by acieroid
 " -----------
 " Pour highlighter la ligne courante (pour mieux se repérer) en bleu :
-"set cursorline
-"highlight CursorLine ctermbg=blue
+set cursorline
+highlight CursorLine
 
 " Pour activer les numéros de lignes dans la marge :
 set number
@@ -195,11 +198,16 @@ set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
 Bundle 'gmarik/vundle'
+Bundle 'junegunn/seoul256.vim'
+Bundle 'bling/vim-airline'
 Bundle 'scrooloose/syntastic'
 Bundle 'scrooloose/nerdtree'
 Bundle 'jistr/vim-nerdtree-tabs'
 Bundle 'tpope/vim-surround'
 Bundle 'kien/ctrlp.vim'
+
+Bundle 'tpope/vim-fugitive'
+Bundle 'airblade/vim-gitgutter'
 
 Bundle 'msanders/snipmate.vim'
 
@@ -208,27 +216,53 @@ Bundle 'einars/js-beautify'
 Bundle 'jelera/vim-javascript-syntax'
 Bundle 'pangloss/vim-javascript'
 
+Bundle 'othree/html5.vim'
+Bundle 'evidens/vim-twig'
+Bundle 'tokutake/twig-indent'
+Bundle 'groenewege/vim-less'
+
 Bundle 'StanAngeloff/php.vim'
 
 filetype off
 filetype plugin indent on
 
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+"let g:airline_theme = 'murmur'
+
+colorscheme jellybean
+
+" Open file in new tab by default
+set switchbuf+=usetab,newtab
+
+" mapleader
+let mapleader=","
 
 " Open NERDTree at startup
 let g:nerdtree_tabs_open_on_console_startup=1
 
 " Remove trailing space when saving
-autocmd BufWritePre * :%s/\s\+$//e
+" autocmd BufWritePre * :%s/\s\+$//e
+nmap <Leader>Cts :%s/\s\+$//e <CR>
+
+" W to write as root
+" command! is used to overwrite W if it exists.
+command! W :execute ':silent w !sudo tee % > /dev/null' | :edit!
 
 "toggle number
-:nmap <F2> :set nu!<CR>
+nmap <F2> :set nu!<CR>
 
 "toggle Tree
 nmap <F6> :NERDTreeTabsToggle<CR>
 nmap <F7> :NERDTreeFind<CR>
 
 "search
-map <F4> :execute "noautocmd vimgrep /" . expand("<cword>") . "/j **/*" . expand("%:e") <Bar> cw<CR>
+map <F4> :execute "noautocmd vimgrep /\\<" . expand("<cword>") . "\\>/j **/*" . expand("%:e") <Bar> cw<CR>
+map <Leader>Fc :execute "noautocmd vimgrep /\\<class " . expand("<cword>") . "\\>/j **/*" . expand("%:e") <Bar> cw<CR>
+map <Leader>Ff :execute "noautocmd vimgrep /\\<function " . expand("<cword>") . "\\>/j **/*" . expand("%:e") <Bar> cw<CR>
 
 "set swap directory
 set directory=~/.vim/swap
@@ -248,3 +282,15 @@ augroup VisibleNaughtiness
     autocmd BufEnter  *           set nolist
     autocmd BufEnter  *       endif
 augroup END
+
+"This allows for change paste motion cp{motion}
+nmap <silent> cp :set opfunc=ChangePaste<CR>g@
+function! ChangePaste(type, ...)
+    silent exe "normal! `[v`]\"_c"
+    silent exe "normal! p"
+endfunction
+
+set colorcolumn=80,120
+hi ColorColumn ctermbg=95
+
+map <Leader>Rc :so $MYVIMRC<CR>

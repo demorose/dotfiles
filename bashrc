@@ -1,8 +1,4 @@
-
-if [[ $- != *i* ]] ; then
-	# Shell is non-interactive.  Be done now!
-	return
-fi
+[ -z "$PS1" ] && return
 
 case "$TERM" in
     rxvt-unicode-256color)
@@ -62,20 +58,6 @@ ON_WHITE='\e[47m'       # White
 if [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
 fi
-    # To truncate PWD if > 1/3 of screen
-
-function truncate_pwd
-{
-  newPWD="${PWD/#$HOME/~}"
-  local pwdmaxlen=$((${COLUMNS:-30}/3))
-  if [ ${#newPWD} -gt $pwdmaxlen ]
-  then
-     newPWD="[...]${newPWD: -$pwdmaxlen}"
-  fi
-  nbFiles=$(ls -1 | wc -l | sed 's: ::g')
-  sizeFiles=$(ls -lah | grep -m 1 total | sed 's/total //')
-}
-
 
             #########
             # START #
@@ -86,7 +68,7 @@ if hash xrdb 2>/dev/null; then
 fi
 #command fortune | cowsay -f tux
 echo -e $PURPLE $(cat ~/.reminder)
-export PATH=$PATH:~/script
+export PATH=$PATH:~/scripts
 
 #        VAR
 
@@ -100,10 +82,40 @@ BROWSER=chromium
         #                                     #
         #######################################
 
+
+function parse_git_branch {
+    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
+}
+
+function parse_git_status {
+    nodeleted=`git status --porcelain 2> /dev/null | grep -E "^(D)" | wc -l`
+    noupdated=`git status --porcelain 2> /dev/null | grep -E "^ (M|D)" | wc -l`
+    nocommitted=`git status --porcelain 2> /dev/null | grep -E "^(M|A|D|R|C)" | wc -l`
+
+    if [[ $nocommitted -gt 0 ]]; then echo -n " +$nocommitted"; fi
+    if [[ $noupdated -gt 0 ]]; then echo -n " ~$noupdated"; fi
+    if [[ $nodeleted -gt 0 ]]; then echo -n " -$nodeleted"; fi
+}
+
+    # To truncate PWD if > 1/3 of screen
+
+function truncate_pwd
+{
+  newPWD="${PWD/#$HOME/~}"
+  local pwdmaxlen=$((${COLUMNS:-50}/3))
+  if [ ${#newPWD} -gt $pwdmaxlen ]
+  then
+     newPWD="[...]${newPWD: -$pwdmaxlen}"
+  fi
+  nbFiles=$(ls -1 | wc -l | sed 's: ::g')
+  sizeFiles=$(ls -lah | grep -m 1 total | sed 's/total //')
+}
+
     # Retrive return value
 PROMPT_COMMAND='RET=$?;truncate_pwd;'
 RET_VALUE='$(echo $RET)' #Ret value not colorized - you can modify it.
 RET_SMILEY='$(if [[ $RET = 0 ]]; then echo -ne "\[$GREEN\]●"; else echo -ne "\[$RED\]●"; fi;)'
+GIT_INFO='$(if [[ ! -z $(parse_git_branch) ]]; then echo -ne "\[$GREEN\]]\[$GREEN\][\[$YELLOW\]$(parse_git_branch)$(parse_git_status)"; fi;)'
 
     # If root: red, else: blue
 if [[ $EUID -ne 0 ]]; then
@@ -120,6 +132,7 @@ if [ -n "$SSH_CLIENT" ]; then
 else
     PS1=$PS1"\[$UCYAN\]\h\[$CYAN\]:\${newPWD}"
 fi
+PS1=$PS1"$GIT_INFO"
 
 PS1=$PS1"\[$GREEN\]]-[\[$PURPLE\]\$(who | wc -l)\[$GREEN\]]"
 PS1=$PS1" $RET_SMILEY"
@@ -208,3 +221,5 @@ setBacklight() {
 function ssh_tmux() {
     ssh -A -t "$1" tmux a || ssh -A -t "$1" tmux;
 }
+
+. /home/emmanuel/.local_bashrc
