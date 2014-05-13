@@ -21,10 +21,10 @@ endif
 
 " Récupération de la position du curseur entre 2 ouvertures de fichiers
 " Parfois ce n'est pas ce qu'on veut ...
-if has("autocmd")
-  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
-    \| exe "normal g'\"" | endif
-endif
+autocmd BufReadPost *
+     \ if line("'\"") > 0 && line("'\"") <= line("$") |
+     \   exe "normal! g`\"" |
+     \ endif
 
 " SI c'est pas déjà fait, affiche la position du curseur
 set ruler
@@ -92,7 +92,6 @@ set expandtab
 " -----------
 " Pour highlighter la ligne courante (pour mieux se repérer) en bleu :
 set cursorline
-highlight CursorLine
 
 " Pour activer les numéros de lignes dans la marge :
 set number
@@ -101,27 +100,6 @@ set number
 " -----------
 " Utilise shiftwidth à la place de tabstop en début de ligne (et backspace supprime d'un coup si ce sont des espaces)
 set smarttab
-
-" sauvegarder les fichier ~ dans ~/.vim/backup avec crréation du répertoire si celui-ci n'existe pas
-if filewritable(expand("~/.vim/backup")) == 2
-  set backupdir=$HOME/.vim/backup
-else
-  if has("unix") || has("win32unix")
-    call system("mkdir $HOME/.vim/backup -p")
-    set backupdir=$HOME/.vim/backup
-  endif
-endif
-
-" donner des droits d'exécution si le fichier commence par #! et contient /bin/ dans son chemin
-function ModeChange()
-  if getline(1) =~ "^#!"
-    if getline(1) =~ "/bin/"
-      silent !chmod a+x <afile>
-    endif
-  endif
-endfunction
-
-au BufWritePost * call ModeChange()
 
 " by anonyme
 " -----------
@@ -183,8 +161,6 @@ if &term =~ "xterm\\|rxvt"
   autocmd VimLeave * :!echo -ne "\033]12;green\007"
 endif
 
-map Q 
-
 highlight ExtraWhitespace ctermbg=red guibg=red
 match ExtraWhitespace /\s\+$/
 autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
@@ -205,6 +181,8 @@ Bundle 'scrooloose/nerdtree'
 Bundle 'jistr/vim-nerdtree-tabs'
 Bundle 'tpope/vim-surround'
 Bundle 'kien/ctrlp.vim'
+
+Bundle 'demorose/up.vim'
 
 Bundle 'tpope/vim-fugitive'
 Bundle 'airblade/vim-gitgutter'
@@ -233,7 +211,7 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 "let g:airline_theme = 'murmur'
 
-colorscheme jellybean
+colorscheme up
 
 " Open file in new tab by default
 set switchbuf+=usetab,newtab
@@ -265,7 +243,7 @@ map <Leader>Fc :execute "noautocmd vimgrep /\\<class " . expand("<cword>") . "\\
 map <Leader>Ff :execute "noautocmd vimgrep /\\<function " . expand("<cword>") . "\\>/j **/*" . expand("%:e") <Bar> cw<CR>
 
 "set swap directory
-set directory=~/.vim/swap
+"set directory=~/.vim/swap
 
 "Remove highlight with F3
 map <F3> :nohl <CR>
@@ -291,6 +269,12 @@ function! ChangePaste(type, ...)
 endfunction
 
 set colorcolumn=80,120
-hi ColorColumn ctermbg=95
 
 map <Leader>Rc :so $MYVIMRC<CR>
+
+" http://amix.dk/vim/vimrc.html
+set lazyredraw
+set nobackup
+set nowb
+set noswapfile
+set viminfo^=%
