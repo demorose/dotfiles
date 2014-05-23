@@ -191,7 +191,7 @@ Bundle 'msanders/snipmate.vim'
 
 Bundle 'maksimr/vim-jsbeautify'
 Bundle 'einars/js-beautify'
-Bundle 'jelera/vim-javascript-syntax'
+Bundle 'Delapouite/vim-javascript-syntax'
 Bundle 'pangloss/vim-javascript'
 
 Bundle 'othree/html5.vim'
@@ -200,6 +200,7 @@ Bundle 'tokutake/twig-indent'
 Bundle 'groenewege/vim-less'
 
 Bundle 'StanAngeloff/php.vim'
+Bundle 'docteurklein/php-getter-setter.vim'
 
 filetype off
 filetype plugin indent on

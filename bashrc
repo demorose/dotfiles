@@ -84,17 +84,29 @@ BROWSER=chromium
 
 
 function parse_git_branch {
-    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
+    timeout 0.5s git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
 }
 
 function parse_git_status {
-    nodeleted=`git status --porcelain 2> /dev/null | grep -E "^(D)" | wc -l`
-    noupdated=`git status --porcelain 2> /dev/null | grep -E "^ (M|D)" | wc -l`
-    nocommitted=`git status --porcelain 2> /dev/null | grep -E "^(M|A|D|R|C)" | wc -l`
+    gitStatus=`timeout 0.5s git status --porcelain`
+    nodeleted=`echo $gitStatus | grep -E "^(D)" | wc -l`
+    noupdated=`echo $gitStatus | grep -E "^ (M|D)" | wc -l`
+    nocommitted=`echo $gitStatus | grep -E "^(M|A|D|R|C)" | wc -l`
+    noadded=`echo $gitStatus | grep -E "^(\?)" | wc -l`
 
+    if [[ -z $gitStatus ]]; then echo -n " !?"; fi
     if [[ $nocommitted -gt 0 ]]; then echo -n " +$nocommitted"; fi
     if [[ $noupdated -gt 0 ]]; then echo -n " ~$noupdated"; fi
     if [[ $nodeleted -gt 0 ]]; then echo -n " -$nodeleted"; fi
+    if [[ $noadded -gt 0 ]]; then echo -n " ?$noadded"; fi
+}
+
+function get_ip {
+    ifconfig  | grep 'inet adr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}' | head -n 1
+}
+
+function test_network {
+    timeout 0.2s ping -q -w 1 -c 1 www.google.fr > /dev/null 2>&1 && echo -ne "$BCYAN" || echo -ne "$BBLACK"
 }
 
     # To truncate PWD if > 1/3 of screen
@@ -114,17 +126,19 @@ function truncate_pwd
     # Retrive return value
 PROMPT_COMMAND='RET=$?;truncate_pwd;'
 RET_VALUE='$(echo $RET)' #Ret value not colorized - you can modify it.
-RET_SMILEY='$(if [[ $RET = 0 ]]; then echo -ne "\[$GREEN\]●"; else echo -ne "\[$RED\]●"; fi;)'
-GIT_INFO='$(if [[ ! -z $(parse_git_branch) ]]; then echo -ne "\[$GREEN\]]\[$GREEN\][\[$YELLOW\]$(parse_git_branch)$(parse_git_status)"; fi;)'
+RET_SMILEY='$(if [[ $RET = 0 ]]; then echo -ne "\[$GREEN\]"; else echo -ne "\[$RED\]"; fi;)'
+GIT_INFO='$(if [[ ! -z $(parse_git_branch) ]]; then echo -ne "\[$userColor\]]\[$userColor\][\[$YELLOW\]$(parse_git_branch)$(parse_git_status)"; fi;)'
+IP='$(test_network)$(get_ip)'
 
     # If root: red, else: blue
 if [[ $EUID -ne 0 ]]; then
-    PS1="\[$BLUE\]┌[\u]"
+    userColor=$BLUE
 else
-    PS1="\[$RED\]┌[R]"
+    userColor=$RED
 fi
+PS1="\[$userColor\]┌[\u]"
 
-PS1=$PS1"\[$GREEN\][\[$YELLOW\]\t "
+PS1=$PS1"[\[$YELLOW\]\t "
 
     #If over ssh, then add ssh:// on hostname
 if [ -n "$SSH_CLIENT" ]; then
@@ -132,9 +146,10 @@ if [ -n "$SSH_CLIENT" ]; then
 else
     PS1=$PS1"\[$UCYAN\]\h\[$CYAN\]:\${newPWD}"
 fi
+PS1=$PS1"\[$userColor\]][\[$BCYAN\]$IP"
 PS1=$PS1"$GIT_INFO"
 
-PS1=$PS1"\[$GREEN\]]-[\[$PURPLE\]\$(who | wc -l)\[$GREEN\]]"
+PS1=$PS1"\[$userColor\]][\[$PURPLE\]\$(who | wc -l)\[$userColor\]]"
 PS1=$PS1" $RET_SMILEY"
 
     # If root: red, else: blue
