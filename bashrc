@@ -102,7 +102,7 @@ function parse_git_status {
 }
 
 function get_ip {
-    ifconfig  | grep 'inet adr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}' | head -n 1
+    ifconfig  | grep 'inet '| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $2}' | head -n 1
 }
 
 function test_network {
@@ -237,4 +237,4 @@ function ssh_tmux() {
     ssh -A -t "$1" tmux a || ssh -A -t "$1" tmux;
 }
 
-. /home/emmanuel/.local_bashrc
+. ~/.local_bashrc
