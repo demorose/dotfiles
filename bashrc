@@ -89,12 +89,15 @@ function parse_git_branch {
 
 function parse_git_status {
     gitStatus=`timeout 0.5s git status --porcelain`
-    nodeleted=`echo $gitStatus | grep -E "^(D)" | wc -l`
-    noupdated=`echo $gitStatus | grep -E "^ (M|D)" | wc -l`
-    nocommitted=`echo $gitStatus | grep -E "^(M|A|D|R|C)" | wc -l`
-    noadded=`echo $gitStatus | grep -E "^(\?)" | wc -l`
+    gitRetVal=$?
+    if [ $gitRetVal -ne 0 ]; then
+        return $gitRetVal;
+    fi
+    nodeleted=`echo "$gitStatus" | grep -E "^(D)" | wc -l`
+    noupdated=`echo "$gitStatus" | grep -E "^ (M|D)" | wc -l`
+    nocommitted=`echo "$gitStatus" | grep -E "^(M|A|D|R|C)" | wc -l`
+    noadded=`echo "$gitStatus" | grep -E "^(\?)" | wc -l`
 
-    if [[ -z $gitStatus ]]; then echo -n " !?"; fi
     if [[ $nocommitted -gt 0 ]]; then echo -n " +$nocommitted"; fi
     if [[ $noupdated -gt 0 ]]; then echo -n " ~$noupdated"; fi
     if [[ $nodeleted -gt 0 ]]; then echo -n " -$nodeleted"; fi
@@ -102,7 +105,7 @@ function parse_git_status {
 }
 
 function get_ip {
-    ifconfig  | grep 'inet '| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $2}' | head -n 1
+    ifconfig  | grep 'inet '| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}' | head -n 1
 }
 
 function test_network {
@@ -128,7 +131,7 @@ PROMPT_COMMAND='RET=$?;truncate_pwd;'
 RET_VALUE='$(echo $RET)' #Ret value not colorized - you can modify it.
 RET_SMILEY='$(if [[ $RET = 0 ]]; then echo -ne "\[$GREEN\]"; else echo -ne "\[$RED\]"; fi;)'
 GIT_INFO='$(if [[ ! -z $(parse_git_branch) ]]; then echo -ne "\[$userColor\]]\[$userColor\][\[$YELLOW\]$(parse_git_branch)$(parse_git_status)"; fi;)'
-IP='$(test_network)$(get_ip)'
+IP='$(if [[ ! -z $(get_ip) ]]; then echo $(test_network)$(get_ip); fi;)'
 
     # If root: red, else: blue
 if [[ $EUID -ne 0 ]]; then
