@@ -122,25 +122,27 @@ function truncate_pwd
 prompt() {
     RET_COLOR='$(if [[ $RET = 0 ]]; then echo -ne "\[$GREEN\]"; else echo -ne "\[$RED\]"; fi;)'
     RET_SMILEY='$(if [[ $RET = 0 ]]; then echo -ne "\[$GREEN\]"; else echo -ne "\[$RED\]"; fi;)'
-    GIT_INFO='$(if [[ ! -z $(parse_git_branch) ]]; then echo -ne "\[$userColor\]]\[$userColor\][\[$YELLOW\]$(parse_git_branch)$(parse_git_status)"; fi;)'
+    GIT_INFO='$(if [[ ! -z $(parse_git_branch) ]]; then echo -ne "\[$USERCOLOR\]]\[$USERCOLOR\][\[$YELLOW\]$(parse_git_branch)$(parse_git_status)"; fi;)'
     IP='$(if [[ ! -z $(get_ip) ]]; then echo $(test_network)$(get_ip); fi;)'
 
     # If root: red, else: blue
     if [[ $EUID -ne 0 ]]; then
-        userColor=$BLUE
+        USERCOLOR=$BLUE
+        BUSERCOLOR=$BBLUE
     else
-        userColor=$RED
+        USERCOLOR=$RED
+        BUSERCOLOR=$BRED
     fi
     # for console of less than 100 col
     if [[ $COLUMNS -lt 100 ]]; then
 
-        PS1="\[$userColor\]┌[\u]["
+        PS1="\[$USERCOLOR\]┌[\u]["
         PS1=$PS1"\[$CYAN\]\${newPWD}"
-        PS1=$PS1"\[$userColor\]]\n└─[$RET_COLOR\!\[$userColor\]]─┤"
+        PS1=$PS1"\[$USERCOLOR\]]\n└─[$RET_COLOR\!\[$USERCOLOR\]]─┤"
 
     # for console of more than 100 col
     else
-        PS1="\[$userColor\]┌[\u]"
+        PS1="\[$USERCOLOR\]┌[\u]"
 
         PS1=$PS1"[\[$YELLOW\]\t "
 
@@ -150,14 +152,14 @@ prompt() {
         else
             PS1=$PS1"\[$UCYAN\]\h\[$CYAN\]:\${newPWD}"
         fi
-        PS1=$PS1"\[$userColor\]][\[$BCYAN\]$IP"
+        PS1=$PS1"\[$USERCOLOR\]][\[$BCYAN\]$IP"
         PS1=$PS1"$GIT_INFO"
 
-        PS1=$PS1"\[$userColor\]][\[$PURPLE\]\$(who | wc -l)\[$userColor\]]"
+        PS1=$PS1"\[$USERCOLOR\]][\[$PURPLE\]\$(who | wc -l)\[$USERCOLOR\]]"
         PS1=$PS1" $RET_SMILEY"
 
-        PS1=$PS1"\[$userColor\] \n└╼"
-        PS1=$PS1"[`temp=$(tty) ; echo ${temp:5}`:\[$CYAN\]\!\[$userColor\]]─┤"
+        PS1=$PS1"\[$USERCOLOR\] \n└╼"
+        PS1=$PS1"[`temp=$(tty) ; echo ${temp:5}`:\[$CYAN\]\!\[$USERCOLOR\]]─┤\[$BUSERCOLOR\]"
     fi
 }
 
