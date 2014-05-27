@@ -138,7 +138,7 @@ prompt() {
 
         PS1="\[$USERCOLOR\]┌[\u]["
         PS1=$PS1"\[$CYAN\]\${newPWD}"
-        PS1=$PS1"\[$USERCOLOR\]]\n└─[$RET_COLOR\!\[$USERCOLOR\]]─┤"
+        PS1=$PS1"\[$USERCOLOR\]]\n└─[$RET_COLOR\!\[$USERCOLOR\]]─┨"
 
     # for console of more than 100 col
     else
@@ -158,8 +158,8 @@ prompt() {
         PS1=$PS1"\[$USERCOLOR\]][\[$PURPLE\]\$(who | wc -l)\[$USERCOLOR\]]"
         PS1=$PS1" $RET_SMILEY"
 
-        PS1=$PS1"\[$USERCOLOR\] \n└╼"
-        PS1=$PS1"[`temp=$(tty) ; echo ${temp:5}`:\[$CYAN\]\!\[$USERCOLOR\]]─┤\[$BUSERCOLOR\]"
+        PS1=$PS1"\[$USERCOLOR\] \n└─"
+        PS1=$PS1"[`temp=$(tty) ; echo ${temp:5}`:\[$CYAN\]\!\[$USERCOLOR\]]─┨\[$BUSERCOLOR\]"
     fi
 }
 
