@@ -75,13 +75,7 @@ export PATH=$PATH:~/scripts
 EDITOR=/usr/bin/vim
 BROWSER=chromium
 
-        ################# PS1 #################
-        #                                     #
-        # ┌[demorose][19:27:23 doriath:~]-[1] #
-        # └╼[pts/2]─┤                         #
-        #                                     #
-        #######################################
-
+#        PS1
 
 function parse_git_branch {
     timeout 0.5s git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
@@ -137,9 +131,14 @@ prompt() {
     else
         userColor=$RED
     fi
+    # for console of less than 100 col
     if [[ $COLUMNS -lt 100 ]]; then
 
-        PS1="\[$userColor\]┌[\u][\[$CYAN\]\${newPWD}\[$userColor\]][$RET_COLOR\!\[$userColor\]]\n└─┤"
+        PS1="\[$userColor\]┌[\u]["
+        PS1=$PS1"\[$CYAN\]\${newPWD}"
+        PS1=$PS1"\[$userColor\]]\n└─[$RET_COLOR\!\[$userColor\]]─┤"
+
+    # for console of more than 100 col
     else
         PS1="\[$userColor\]┌[\u]"
 
