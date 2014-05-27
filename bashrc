@@ -112,24 +112,20 @@ function test_network {
     timeout 0.2s ping -q -w 1 -c 1 www.google.fr > /dev/null 2>&1 && echo -ne "$BCYAN" || echo -ne "$BBLACK"
 }
 
-    # To truncate PWD if > 1/3 of screen
-
+# To truncate PWD if > 1/3 of screen
 function truncate_pwd
 {
   newPWD="${PWD/#$HOME/~}"
   local pwdmaxlen=$((${COLUMNS:-50}/3))
   if [ ${#newPWD} -gt $pwdmaxlen ]
   then
-     newPWD="[...]${newPWD: -$pwdmaxlen}"
+     newPWD="...${newPWD: -$pwdmaxlen}"
   fi
   nbFiles=$(ls -1 | wc -l | sed 's: ::g')
   sizeFiles=$(ls -lah | grep -m 1 total | sed 's/total //')
 }
 
-    # Retrive return value
 prompt() {
-
-    RET_VALUE='$(echo $RET)' #Ret value not colorized - you can modify it.
     RET_COLOR='$(if [[ $RET = 0 ]]; then echo -ne "\[$GREEN\]"; else echo -ne "\[$RED\]"; fi;)'
     RET_SMILEY='$(if [[ $RET = 0 ]]; then echo -ne "\[$GREEN\]"; else echo -ne "\[$RED\]"; fi;)'
     GIT_INFO='$(if [[ ! -z $(parse_git_branch) ]]; then echo -ne "\[$userColor\]]\[$userColor\][\[$YELLOW\]$(parse_git_branch)$(parse_git_status)"; fi;)'
@@ -143,7 +139,7 @@ prompt() {
     fi
     if [[ $COLUMNS -lt 100 ]]; then
 
-        PS1="\[$userColor\][\${newPWD}][$RET_COLOR\!\[$userColor\]]─┤"
+        PS1="\[$userColor\]┌[\u][\[$CYAN\]\${newPWD}\[$userColor\]][$RET_COLOR\!\[$userColor\]]\n└─┤"
     else
         PS1="\[$userColor\]┌[\u]"
 
@@ -166,7 +162,7 @@ prompt() {
     fi
 }
 
-# Responsive prompt
+# Retrive return value, truncate pwd, Responsive prompt
 PROMPT_COMMAND='RET=$?;truncate_pwd;prompt;'
 
 # Reset color for command output
