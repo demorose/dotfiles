@@ -127,42 +127,49 @@ function truncate_pwd
 }
 
     # Retrive return value
-PROMPT_COMMAND='RET=$?;truncate_pwd;'
-RET_VALUE='$(echo $RET)' #Ret value not colorized - you can modify it.
-RET_SMILEY='$(if [[ $RET = 0 ]]; then echo -ne "\[$GREEN\]"; else echo -ne "\[$RED\]"; fi;)'
-GIT_INFO='$(if [[ ! -z $(parse_git_branch) ]]; then echo -ne "\[$userColor\]]\[$userColor\][\[$YELLOW\]$(parse_git_branch)$(parse_git_status)"; fi;)'
-IP='$(if [[ ! -z $(get_ip) ]]; then echo $(test_network)$(get_ip); fi;)'
+prompt() {
+
+    RET_VALUE='$(echo $RET)' #Ret value not colorized - you can modify it.
+    RET_COLOR='$(if [[ $RET = 0 ]]; then echo -ne "\[$GREEN\]"; else echo -ne "\[$RED\]"; fi;)'
+    RET_SMILEY='$(if [[ $RET = 0 ]]; then echo -ne "\[$GREEN\]"; else echo -ne "\[$RED\]"; fi;)'
+    GIT_INFO='$(if [[ ! -z $(parse_git_branch) ]]; then echo -ne "\[$userColor\]]\[$userColor\][\[$YELLOW\]$(parse_git_branch)$(parse_git_status)"; fi;)'
+    IP='$(if [[ ! -z $(get_ip) ]]; then echo $(test_network)$(get_ip); fi;)'
 
     # If root: red, else: blue
-if [[ $EUID -ne 0 ]]; then
-    userColor=$BLUE
-else
-    userColor=$RED
-fi
-PS1="\[$userColor\]┌[\u]"
+    if [[ $EUID -ne 0 ]]; then
+        userColor=$BLUE
+    else
+        userColor=$RED
+    fi
+    if [[ $COLUMNS -lt 100 ]]; then
 
-PS1=$PS1"[\[$YELLOW\]\t "
+        PS1="\[$userColor\][\${newPWD}][$RET_COLOR\!\[$userColor\]]─┤"
+    else
+        PS1="\[$userColor\]┌[\u]"
 
-    #If over ssh, then add ssh:// on hostname
-if [ -n "$SSH_CLIENT" ]; then
-    PS1=$PS1"\[$UCYAN\]ssh://\h\[$CYAN\]:\${newPWD}"
-else
-    PS1=$PS1"\[$UCYAN\]\h\[$CYAN\]:\${newPWD}"
-fi
-PS1=$PS1"\[$userColor\]][\[$BCYAN\]$IP"
-PS1=$PS1"$GIT_INFO"
+        PS1=$PS1"[\[$YELLOW\]\t "
 
-PS1=$PS1"\[$userColor\]][\[$PURPLE\]\$(who | wc -l)\[$userColor\]]"
-PS1=$PS1" $RET_SMILEY"
+            #If over ssh, then add ssh:// on hostname
+        if [ -n "$SSH_CLIENT" ]; then
+            PS1=$PS1"\[$UCYAN\]ssh://\h\[$CYAN\]:\${newPWD}"
+        else
+            PS1=$PS1"\[$UCYAN\]\h\[$CYAN\]:\${newPWD}"
+        fi
+        PS1=$PS1"\[$userColor\]][\[$BCYAN\]$IP"
+        PS1=$PS1"$GIT_INFO"
 
-    # If root: red, else: blue
-if [[ $EUID -ne 0 ]]; then
-    PS1=$PS1"\[$BLUE\] \n└╼"
-else
-    PS1=$PS1"\[$RED\] \n└╼"
-fi
-PS1=$PS1"[`temp=$(tty) ; echo ${temp:5}`]─┤"
-    # Reset color for command output
+        PS1=$PS1"\[$userColor\]][\[$PURPLE\]\$(who | wc -l)\[$userColor\]]"
+        PS1=$PS1" $RET_SMILEY"
+
+        PS1=$PS1"\[$userColor\] \n└╼"
+        PS1=$PS1"[`temp=$(tty) ; echo ${temp:5}`:\[$CYAN\]\!\[$userColor\]]─┤"
+    fi
+}
+
+# Responsive prompt
+PROMPT_COMMAND='RET=$?;truncate_pwd;prompt;'
+
+# Reset color for command output
 trap 'echo -ne "$Color_Off"' DEBUG
 
             ###########
