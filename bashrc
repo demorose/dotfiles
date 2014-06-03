@@ -122,8 +122,8 @@ function truncate_pwd
 prompt() {
     RET_COLOR='$(if [[ $RET = 0 ]]; then echo -ne "\[$GREEN\]"; else echo -ne "\[$RED\]"; fi;)'
     RET_SMILEY='$(if [[ $RET = 0 ]]; then echo -ne "\[$GREEN\]"; else echo -ne "\[$RED\]"; fi;)'
-    GIT_INFO='$(if [[ ! -z $(parse_git_branch) ]]; then echo -ne "\[$USERCOLOR\]]\[$USERCOLOR\][\[$YELLOW\]$(parse_git_branch)$(parse_git_status)"; fi;)'
-    IP='$(if [[ ! -z $(get_ip) ]]; then echo $(test_network)$(get_ip); fi;)'
+    GIT_INFO='$(if [[ ! -z $(parse_git_branch) ]]; then echo -ne "\[$USERCOLOR\]][\[$YELLOW\]$(parse_git_branch)$(parse_git_status)"; fi;)'
+    IP='$(if [[ ! -z $(get_ip) ]]; then echo -ne "\[$USERCOLOR\]][$(test_network)$(get_ip)"; fi;)'
 
     # If root: red, else: blue
     if [[ $EUID -ne 0 ]]; then
@@ -152,7 +152,7 @@ prompt() {
         else
             PS1=$PS1"\[$UCYAN\]\h\[$CYAN\]:\${newPWD}"
         fi
-        PS1=$PS1"\[$USERCOLOR\]][\[$BCYAN\]$IP"
+        PS1=$PS1"$IP"
         PS1=$PS1"$GIT_INFO"
 
         PS1=$PS1"\[$USERCOLOR\]][\[$PURPLE\]\$(who | wc -l)\[$USERCOLOR\]]"
