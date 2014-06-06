@@ -262,6 +262,9 @@ augroup VisibleNaughtiness
     autocmd BufEnter  *       endif
 augroup END
 
+" Toggle naughty characters display
+map <Leader>Tnc :set list!<CR>
+
 "This allows for change paste motion cp{motion}
 nmap <silent> cp :set opfunc=ChangePaste<CR>g@
 function! ChangePaste(type, ...)
