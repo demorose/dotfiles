@@ -125,6 +125,12 @@ prompt() {
     GIT_INFO='$(if [[ ! -z $(parse_git_branch) ]]; then echo -ne "\[$USERCOLOR\]][\[$YELLOW\]$(parse_git_branch)$(parse_git_status)"; fi;)'
     IP='$(if [[ ! -z $(get_ip) ]]; then echo -ne "\[$USERCOLOR\]][$(test_network)$(get_ip)"; fi;)'
 
+    if [[ -w "${PWD}" ]]; then
+        PERM=$BLUE"rw"
+    else
+        PERM=$YELLOW"ro"
+    fi
+
     # If root: red, else: blue
     if [[ $EUID -ne 0 ]]; then
         USERCOLOR=$BLUE
@@ -148,10 +154,11 @@ prompt() {
 
             #If over ssh, then add ssh:// on hostname
         if [ -n "$SSH_CLIENT" ]; then
-            PS1=$PS1"\[$UCYAN\]ssh://\h\[$CYAN\]:\${newPWD}"
+            PS1=$PS1"\[$UCYAN\]ssh://\h"
         else
-            PS1=$PS1"\[$UCYAN\]\h\[$CYAN\]:\${newPWD}"
+            PS1=$PS1"\[$UCYAN\]\h"
         fi
+        PS1=$PS1"$CYAN:\${newPWD}:$PERM"
         PS1=$PS1"$IP"
         PS1=$PS1"$GIT_INFO"
 
