@@ -188,6 +188,9 @@ alias vi='vim'
 alias top='htop'
 alias lt='tty-clock -s -r; vlock'
 
+#      OPTIONS
+HISTSIZE=10000
+
             #############
             # FUNCTIONS #
             #############
