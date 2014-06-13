@@ -183,6 +183,7 @@ Bundle 'tpope/vim-surround'
 Bundle 'kien/ctrlp.vim'
 
 Bundle 'demorose/up.vim'
+Bundle 'morhetz/gruvbox'
 
 Bundle 'tpope/vim-fugitive'
 Bundle 'airblade/vim-gitgutter'
@@ -239,8 +240,11 @@ nmap <F6> :NERDTreeTabsToggle<CR>
 nmap <F7> :NERDTreeFind<CR>
 
 "search
-map <F4> :execute "noautocmd vimgrep /\\<" . expand("<cword>") . "\\>/j **/*" . expand("%:e") <Bar> cw<CR>
+" Find occurence
+map <Leader>Fo :execute "noautocmd vimgrep /\\<" . expand("<cword>") . "\\>/j **/*" . expand("%:e") <Bar> cw<CR>
+" Find class
 map <Leader>Fc :execute "noautocmd vimgrep /\\<class " . expand("<cword>") . "\\>/j **/*" . expand("%:e") <Bar> cw<CR>
+" Find function
 map <Leader>Ff :execute "noautocmd vimgrep /\\<function " . expand("<cword>") . "\\>/j **/*" . expand("%:e") <Bar> cw<CR>
 
 "set swap directory
