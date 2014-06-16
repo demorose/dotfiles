@@ -124,12 +124,13 @@ prompt() {
     RET_SMILEY='$(if [[ $RET = 0 ]]; then echo -ne "\[$GREEN\]"; else echo -ne "\[$RED\]"; fi;)'
     GIT_INFO='$(if [[ ! -z $(parse_git_branch) ]]; then echo -ne "\[$USERCOLOR\]][\[$YELLOW\]$(parse_git_branch)$(parse_git_status)"; fi;)'
     IP='$(if [[ ! -z $(get_ip) ]]; then echo -ne "\[$USERCOLOR\]][$(test_network)$(get_ip)"; fi;)'
-
-    if [[ -w "${PWD}" ]]; then
-        PERM=$BLUE"rw"
-    else
-        PERM=$YELLOW"ro"
-    fi
+   # Waiting for a better design
+   # if [[ -w "${PWD}" ]]; then
+   #     PERM=$BLUE"rw"
+   # else
+   #     PERM=$YELLOW"ro"
+   # fi
+   PERM=''
 
     # If root: red, else: blue
     if [[ $EUID -ne 0 ]]; then
@@ -158,7 +159,7 @@ prompt() {
         else
             PS1=$PS1"\[$UCYAN\]\h"
         fi
-        PS1=$PS1"$CYAN:\${newPWD}:$PERM"
+        PS1=$PS1"$CYAN:\${newPWD}$PERM"
         PS1=$PS1"$IP"
         PS1=$PS1"$GIT_INFO"
 
@@ -166,7 +167,7 @@ prompt() {
         PS1=$PS1" $RET_SMILEY"
 
         PS1=$PS1"\[$USERCOLOR\] \n└─"
-        PS1=$PS1"[`temp=$(tty) ; echo ${temp:5}`:\[$CYAN\]\!\[$USERCOLOR\]]─┨\[$BUSERCOLOR\]"
+        PS1=$PS1"[`temp=$(tty) ; echo ${temp:5}`:\[$CYAN\]\!\[$USERCOLOR\]]─┨\[$USERCOLOR\]"
     fi
 }
 
