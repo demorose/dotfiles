@@ -137,6 +137,7 @@ Bundle 'tpope/vim-fugitive'
 Bundle 'airblade/vim-gitgutter'
 
 Bundle 'msanders/snipmate.vim'
+Bundle 'DrawIt'
 
 Bundle 'maksimr/vim-jsbeautify'
 Bundle 'einars/js-beautify'
