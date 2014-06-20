@@ -70,11 +70,6 @@ set number
 " Utilise shiftwidth à la place de tabstop en début de ligne (et backspace supprime d'un coup si ce sont des espaces)
 set smarttab
 
-" autoindent n'est spécifique à aucun langage et fonctionne en général moins bien
-set noautoindent
-filetype plugin indent on
-filetype indent on
-
 " On peut passer rapidement du mode paste au mode nopaste avec un raccourcis,
 set pastetoggle=<F5>
 
@@ -156,7 +151,9 @@ Bundle 'groenewege/vim-less'
 Bundle 'StanAngeloff/php.vim'
 Bundle 'docteurklein/php-getter-setter.vim'
 
+set noautoindent
 filetype off
+filetype indent on
 filetype plugin indent on
 
 if !exists('g:airline_symbols')

@@ -99,7 +99,7 @@ function parse_git_status {
 }
 
 function get_ip {
-    ifconfig  | grep 'inet '| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}' | head -n 1
+    ip a s  | awk '/inet / {print $2}' | grep -v '127.0.0.1' | head -n 1
 }
 
 function test_network {
