@@ -96,7 +96,7 @@ if hash xrdb 2>/dev/null; then
     xrdb ~/.Xdefault
 fi
 #command fortune | cowsay -f tux
-echo -e $PURPLE $(cat ~/.reminder)
+echo -e "$PURPLE$(cat ~/.reminder)"
 export PATH=$PATH:~/scripts
 
 #        VAR
@@ -204,7 +204,7 @@ prompt() {
 PROMPT_COMMAND='RET=$?;truncate_pwd;prompt;'
 
 # Reset color for command output
-trap 'echo -ne "$Color_Off"' DEBUG
+trap 'echo -ne "$COLOR_OFF"' DEBUG
 
             ###########
             # ALIASES #
@@ -264,9 +264,9 @@ music_ping() {
 
 remind(){
     if [ "$#" == "0" ]; then
-        echo -e $PURPLE $(cat ~/.reminder);
+        echo -e "$PURPLE$(cat ~/.reminder)";
     else
-        echo "$@\n" >> ~/.reminder;
+        echo "$@" >> ~/.reminder;
     fi
 }
 

@@ -200,6 +200,9 @@ map <Leader>Fc :execute "noautocmd vimgrep /\\<class " . expand("<cword>") . "\\
 " Find function
 map <Leader>Ff :execute "noautocmd vimgrep /\\<function " . expand("<cword>") . "\\>/j **/*" . expand("%:e") <Bar> cw<CR>
 
+map <Leader>fc /class 
+map <Leader>ff /function 
+
 "set swap directory
 "set directory=~/.vim/swap
 
@@ -238,4 +241,3 @@ set lazyredraw
 set nobackup
 set nowb
 set noswapfile
-set viminfo^=%
