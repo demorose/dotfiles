@@ -25,7 +25,7 @@ autocmd BufReadPost *
 set ruler
 
 " Recherche en minuscule -> indépendante de la casse, une majuscule -> stricte
-set smartcase
+set ignorecase smartcase
 
 " Affiche le nombre de lignes sélectionnées en mode visuel ou la touche/commande qu'on vient de taper en mode commande
 set showcmd
@@ -148,6 +148,7 @@ Bundle 'othree/html5.vim'
 Bundle 'evidens/vim-twig'
 Bundle 'tokutake/twig-indent'
 Bundle 'groenewege/vim-less'
+Bundle 'hail2u/vim-css3-syntax'
 
 Bundle 'StanAngeloff/php.vim'
 Bundle 'docteurklein/php-getter-setter.vim'
@@ -200,8 +201,16 @@ map <Leader>Fc :execute "noautocmd vimgrep /\\<class " . expand("<cword>") . "\\
 " Find function
 map <Leader>Ff :execute "noautocmd vimgrep /\\<function " . expand("<cword>") . "\\>/j **/*" . expand("%:e") <Bar> cw<CR>
 
+" Init vimgrep
+map <Leader>Fg :execute "noautocmd vimgrep //j **/*" . expand("%:e")
+
 map <Leader>fc /class 
 map <Leader>ff /function 
+
+noremap <Up> <NOP>
+noremap <Down> <NOP>
+noremap <Left> <NOP>
+noremap <Right> <NOP>
 
 "set swap directory
 "set directory=~/.vim/swap

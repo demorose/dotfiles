@@ -118,7 +118,7 @@ function parse_git_status {
     fi
     nodeleted=`echo "$gitStatus" | grep -E "^(D)" | wc -l`
     noupdated=`echo "$gitStatus" | grep -E "^ (M|D)" | wc -l`
-    nocommitted=`echo "$gitStatus" | grep -E "^(M|A|D|R|C)" | wc -l`
+    nocommitted=`echo "$gitStatus" | grep -E "^(M|A|R|C)" | wc -l`
     noadded=`echo "$gitStatus" | grep -E "^(\?)" | wc -l`
 
     if [[ $nocommitted -gt 0 ]]; then echo -n " +$nocommitted"; fi
@@ -264,7 +264,7 @@ music_ping() {
 
 remind(){
     if [ "$#" == "0" ]; then
-        echo -e "$PURPLE$(cat ~/.reminder)";
+        echo -e "$PURPLE$(cat ~/.reminder)$COLOR_OFF";
     else
         echo "$@" >> ~/.reminder;
     fi
