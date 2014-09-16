@@ -1,4 +1,4 @@
-"n de défauts bien pratiques (à garder en début de fichier)
+"n de défauts bien pratiques (à garder en début de fichier) 
 set nocompatible
 
 " 256 colors
@@ -100,6 +100,9 @@ set history=50
 :autocmd BufNewFile *.sh,*.bash 0put =\"#!/bin/bash\<nl># -*- coding: utf-8 -*-\<nl>\<nl>\"|$
 :autocmd BufNewFile *.py 0put=\"#!/usr/bin/env python\"|1put=\"# -*- coding: utf-8 -*-\<nl>\<nl>\"|$
 
+" Set filetype to css when using css.twig
+:autocmd BufNewFile,BufRead *.css.twig set ft=css
+
 
 " Set an orange cursor in insert mode, and a red cursor otherwise.
 if &term =~ "xterm\\|rxvt"
@@ -122,15 +125,15 @@ set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
 Bundle 'gmarik/vundle'
-Bundle 'junegunn/seoul256.vim'
 Bundle 'bling/vim-airline'
 Bundle 'scrooloose/syntastic'
 Bundle 'scrooloose/nerdtree'
 Bundle 'jistr/vim-nerdtree-tabs'
 Bundle 'tpope/vim-surround'
-Bundle 'kien/ctrlp.vim'
 
 Bundle 'demorose/up.vim'
+Bundle 'junegunn/seoul256.vim'
+Bundle 'nanotech/jellybeans.vim'
 Bundle 'morhetz/gruvbox'
 
 Bundle 'tpope/vim-fugitive'
@@ -149,8 +152,8 @@ Bundle 'evidens/vim-twig'
 Bundle 'tokutake/twig-indent'
 Bundle 'groenewege/vim-less'
 Bundle 'hail2u/vim-css3-syntax'
-
 Bundle 'StanAngeloff/php.vim'
+
 Bundle 'docteurklein/php-getter-setter.vim'
 
 set noautoindent
@@ -165,7 +168,7 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 "let g:airline_theme = 'murmur'
 
-colorscheme up
+colorscheme seoul256
 
 " Open file in new tab by default
 set switchbuf+=usetab,newtab
@@ -250,3 +253,21 @@ set lazyredraw
 set nobackup
 set nowb
 set noswapfile
+
+" Remove diacritical signs from characters in specified range of lines.
+" Examples of characters replaced: á -> a, ç -> c, Á -> A, Ç -> C.
+" Uses substitute so changes can be confirmed.
+function! s:RemoveDiacritics(line1, line2)
+  let diacs = 'áâãàçéêíóôõüú'  " lowercase diacritical signs
+  let repls = 'aaaaceeiooouu'  " corresponding replacements
+  let diacs .= toupper(diacs)
+  let repls .= toupper(repls)
+  let diaclist = split(diacs, '\zs')
+  let repllist = split(repls, '\zs')
+  let trans = {}
+  for i in range(len(diaclist))
+    let trans[diaclist[i]] = repllist[i]
+  endfor
+  execute a:line1.','.a:line2 . 's/['.diacs.']/\=trans[submatch(0)]/gIce'
+endfunction
+command! -range=% RemoveDiacritics call s:RemoveDiacritics(<line1>, <line2>)
