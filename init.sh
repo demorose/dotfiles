@@ -11,11 +11,13 @@ mv ~/.bashrc ~/.bashrc.back
 mv ~/.vimrc ~/.vimrc.back
 mv ~/.Xdefault ~/.Xdefault.back
 mv ~/.inputrc ~/.inputrc.back
+mv ~/.vim/skeletons ~/.vim/skeletons.back
 
 ln -s $SCRIPTPATH/bashrc ~/.bashrc
 ln -s $SCRIPTPATH/vimrc ~/.vimrc
 ln -s $SCRIPTPATH/Xdefault ~/.Xdefault
 ln -s $SCRIPTPATH/inputrc ~/.inputrc
+ln -s $SCRIPTPATH/vim/skeletons ~/.vim/skeletons
 # File used to add local change to bashrc
 touch ~/.local_bashrc
 
