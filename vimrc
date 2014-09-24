@@ -1,4 +1,4 @@
-"n de défauts bien pratiques (à garder en début de fichier) 
+"n de défauts bien pratiques (à garder en début de fichier)
 set nocompatible
 
 " 256 colors
@@ -11,15 +11,15 @@ set background=dark
 
 "Détection du type de fichier pour l'indentation
 if has("autocmd")
-  filetype indent on
+    filetype indent on
 endif
 
 " Récupération de la position du curseur entre 2 ouvertures de fichiers
 " Parfois ce n'est pas ce qu'on veut ...
 autocmd BufReadPost *
-     \ if line("'\"") > 0 && line("'\"") <= line("$") |
-     \   exe "normal! g`\"" |
-     \ endif
+            \ if line("'\"") > 0 && line("'\"") <= line("$") |
+            \   exe "normal! g`\"" |
+            \ endif
 
 " SI c'est pas déjà fait, affiche la position du curseur
 set ruler
@@ -106,10 +106,10 @@ set history=50
 
 " Set an orange cursor in insert mode, and a red cursor otherwise.
 if &term =~ "xterm\\|rxvt"
-  :silent !echo -ne "\033]12;green\007"
-  let &t_SI = "\033]12;orange\007"
-  let &t_EI = "\033]12;green\007"
-  autocmd VimLeave * :!echo -ne "\033]12;green\007"
+    :silent !echo -ne "\033]12;green\007"
+    let &t_SI = "\033]12;orange\007"
+    let &t_EI = "\033]12;green\007"
+    autocmd VimLeave * :!echo -ne "\033]12;green\007"
 endif
 
 highlight ExtraWhitespace ctermbg=red guibg=red
@@ -124,36 +124,47 @@ autocmd BufWinLeave * call clearmatches()
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
+" Vundle
 Bundle 'gmarik/vundle'
+
+" Interface
 Bundle 'bling/vim-airline'
-Bundle 'scrooloose/syntastic'
 Bundle 'scrooloose/nerdtree'
 Bundle 'jistr/vim-nerdtree-tabs'
-Bundle 'tpope/vim-surround'
 
+Bundle 'tpope/vim-surround'
+Bundle 'scrooloose/syntastic'
+
+" ColorScheme
 Bundle 'demorose/up.vim'
 Bundle 'junegunn/seoul256.vim'
 Bundle 'nanotech/jellybeans.vim'
 Bundle 'morhetz/gruvbox'
 
+" Git
 Bundle 'tpope/vim-fugitive'
 Bundle 'airblade/vim-gitgutter'
 
-Bundle 'msanders/snipmate.vim'
+Bundle 'tobyS/skeletons.vim'
+Bundle 'SirVer/ultisnips'
+Bundle 'honza/vim-snippets'
 Bundle 'DrawIt'
 
+" Javascript
 Bundle 'maksimr/vim-jsbeautify'
 Bundle 'einars/js-beautify'
 Bundle 'Delapouite/vim-javascript-syntax'
 Bundle 'pangloss/vim-javascript'
 
+" HTML
 Bundle 'othree/html5.vim'
 Bundle 'evidens/vim-twig'
 Bundle 'tokutake/twig-indent'
 Bundle 'groenewege/vim-less'
 Bundle 'hail2u/vim-css3-syntax'
-Bundle 'StanAngeloff/php.vim'
 
+" PHP
+Bundle 'StanAngeloff/php.vim'
 Bundle 'docteurklein/php-getter-setter.vim'
 
 set noautoindent
@@ -183,7 +194,7 @@ let g:nerdtree_tabs_open_on_console_startup=1
 " autocmd BufWritePre * :%s/\s\+$//e
 nmap <Leader>Cts :%s/\s\+$//e <CR>
 
-nmap <Leader>Cnc :%s///e <Bar> retab <Bar> %s/\s\+$//e <CR>
+"nmap <Leader>Cnc :%s///e <Bar> retab <Bar> %s/\s\+$//e <CR>
 
 " W to write as root
 " command! is used to overwrite W if it exists.
@@ -207,8 +218,8 @@ map <Leader>Ff :execute "noautocmd vimgrep /\\<function " . expand("<cword>") . 
 " Init vimgrep
 map <Leader>Fg :execute "noautocmd vimgrep //j **/*" . expand("%:e")
 
-map <Leader>fc /class 
-map <Leader>ff /function 
+map <Leader>fc /class
+map <Leader>ff /function
 
 noremap <Up> <NOP>
 noremap <Down> <NOP>
@@ -254,20 +265,26 @@ set nobackup
 set nowb
 set noswapfile
 
+" Ultisnip
+let g:UltiSnipsUsePythonVersion = 2
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
 " Remove diacritical signs from characters in specified range of lines.
 " Examples of characters replaced: á -> a, ç -> c, Á -> A, Ç -> C.
 " Uses substitute so changes can be confirmed.
 function! s:RemoveDiacritics(line1, line2)
-  let diacs = 'áâãàçéêíóôõüú'  " lowercase diacritical signs
-  let repls = 'aaaaceeiooouu'  " corresponding replacements
-  let diacs .= toupper(diacs)
-  let repls .= toupper(repls)
-  let diaclist = split(diacs, '\zs')
-  let repllist = split(repls, '\zs')
-  let trans = {}
-  for i in range(len(diaclist))
-    let trans[diaclist[i]] = repllist[i]
-  endfor
-  execute a:line1.','.a:line2 . 's/['.diacs.']/\=trans[submatch(0)]/gIce'
+    let diacs = 'áâãàçéêíóôõüú'  " lowercase diacritical signs
+    let repls = 'aaaaceeiooouu'  " corresponding replacements
+    let diacs .= toupper(diacs)
+    let repls .= toupper(repls)
+    let diaclist = split(diacs, '\zs')
+    let repllist = split(repls, '\zs')
+    let trans = {}
+    for i in range(len(diaclist))
+        let trans[diaclist[i]] = repllist[i]
+    endfor
+    execute a:line1.','.a:line2 . 's/['.diacs.']/\=trans[submatch(0)]/gIce'
 endfunction
 command! -range=% RemoveDiacritics call s:RemoveDiacritics(<line1>, <line2>)
