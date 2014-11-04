@@ -7,7 +7,7 @@ set t_Co=256
 " Coloration syntaxique, indispensable pour ne pas se perdre dans les longs fichiers
 syntax on
 
-set background=dark
+set background=light
 
 "Détection du type de fichier pour l'indentation
 if has("autocmd")
@@ -181,7 +181,7 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 "let g:airline_theme = 'murmur'
 
-colorscheme seoul256-light
+colorscheme solarized
 
 " Open file in new tab by default
 set switchbuf+=usetab,newtab
