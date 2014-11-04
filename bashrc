@@ -132,7 +132,7 @@ function get_ip {
 }
 
 function test_network {
-    timeout 0.2s ping -q -w 1 -c 1 www.google.fr > /dev/null 2>&1 && echo -ne "$BCYAN" || echo -ne "$BBLACK"
+    timeout 0.2s ping -q -w 1 -c 1 www.google.fr > /dev/null 2>&1 && echo -ne "$BBLUE" || echo -ne "$BBLACK"
 }
 
 # To truncate PWD if > 1/3 of screen
@@ -163,8 +163,8 @@ prompt() {
 
     # If root: red, else: blue
     if [[ $EUID -ne 0 ]]; then
-        USERCOLOR=$BLUE
-        BUSERCOLOR=$BBLUE
+        USERCOLOR=$CYAN
+        BUSERCOLOR=$BCYAN
     else
         USERCOLOR=$RED
         BUSERCOLOR=$BRED
@@ -172,23 +172,23 @@ prompt() {
     # for console of less than 100 col
     if [[ $COLUMNS -lt 100 ]]; then
 
-        PS1="\[$USERCOLOR\]┌[\u]["
-        PS1=$PS1"\[$CYAN\]\${newPWD}"
+        PS1="\n\[$USERCOLOR\]┌[\u]["
+        PS1=$PS1"\[$BLUE\]\${newPWD}"
         PS1=$PS1"\[$USERCOLOR\]]\n└─[$RET_COLOR\!\[$USERCOLOR\]]─┨"
 
     # for console of more than 100 col
     else
-        PS1="\[$USERCOLOR\]┌[\u]"
+        PS1="\n\[$USERCOLOR\]┌[\u]"
 
         PS1=$PS1"[\[$YELLOW\]\t "
 
             #If over ssh, then add ssh:// on hostname
         if [ -n "$SSH_CLIENT" ]; then
-            PS1=$PS1"\[$UCYAN\]ssh://\h"
+            PS1=$PS1"\[$UBLUE\]ssh://\h"
         else
-            PS1=$PS1"\[$UCYAN\]\h"
+            PS1=$PS1"\[$UBLUE\]\h"
         fi
-        PS1=$PS1"$CYAN:\${newPWD}$PERM"
+        PS1=$PS1"$BLUE:\${newPWD}$PERM"
         PS1=$PS1"$IP"
         PS1=$PS1"$GIT_INFO"
 
@@ -196,7 +196,7 @@ prompt() {
         PS1=$PS1" $RET_SMILEY"
 
         PS1=$PS1"\[$USERCOLOR\] \n└─"
-        PS1=$PS1"[`temp=$(tty) ; echo ${temp:5}`:\[$CYAN\]\!\[$USERCOLOR\]]─┨\[$USERCOLOR\]"
+        PS1=$PS1"[`temp=$(tty) ; echo ${temp:5}`:\[$BLUE\]\!\[$USERCOLOR\]]─┨\[$USERCOLOR\]"
     fi
 }
 

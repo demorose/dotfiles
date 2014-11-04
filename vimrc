@@ -101,7 +101,7 @@ set history=50
 :autocmd BufNewFile *.py 0put=\"#!/usr/bin/env python\"|1put=\"# -*- coding: utf-8 -*-\<nl>\<nl>\"|$
 
 " Set filetype to css when using css.twig
-:autocmd BufNewFile,BufRead *.css.twig set ft=css
+:autocmd BufRead *.css.twig :set ft=css
 
 
 " Set an orange cursor in insert mode, and a red cursor otherwise.
@@ -140,6 +140,7 @@ Bundle 'demorose/up.vim'
 Bundle 'junegunn/seoul256.vim'
 Bundle 'nanotech/jellybeans.vim'
 Bundle 'morhetz/gruvbox'
+Bundle 'altercation/vim-colors-solarized'
 
 " Git
 Bundle 'tpope/vim-fugitive'
@@ -165,7 +166,8 @@ Bundle 'hail2u/vim-css3-syntax'
 
 " PHP
 Bundle 'StanAngeloff/php.vim'
-Bundle 'docteurklein/php-getter-setter.vim'
+Bundle 'demorose/php-getter-setter.vim'
+Bundle 'stephpy/vim-php-cs-fixer'
 
 set noautoindent
 filetype off
@@ -179,7 +181,7 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 "let g:airline_theme = 'murmur'
 
-colorscheme seoul256
+colorscheme seoul256-light
 
 " Open file in new tab by default
 set switchbuf+=usetab,newtab
@@ -288,3 +290,7 @@ function! s:RemoveDiacritics(line1, line2)
     execute a:line1.','.a:line2 . 's/['.diacs.']/\=trans[submatch(0)]/gIce'
 endfunction
 command! -range=% RemoveDiacritics call s:RemoveDiacritics(<line1>, <line2>)
+
+let g:syntastic_enable_sign=1
+let g:syntastic_php_checkers=['php', 'phpcs']
+let g:syntastic_php_phpcs_args="--standard=PSR2 -n --report=csv"
