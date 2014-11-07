@@ -1,0 +1,2 @@
+hardstatus on
+hardstatus alwayslastline "%{wk} %-w%{R}%f%n %t%{-}%+w %=%{G.}[%H] %D %d/%m %C:%s"

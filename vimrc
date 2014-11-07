@@ -100,9 +100,7 @@ set history=50
 :autocmd BufNewFile *.sh,*.bash 0put =\"#!/bin/bash\<nl># -*- coding: utf-8 -*-\<nl>\<nl>\"|$
 :autocmd BufNewFile *.py 0put=\"#!/usr/bin/env python\"|1put=\"# -*- coding: utf-8 -*-\<nl>\<nl>\"|$
 
-" Set filetype to css when using css.twig
-:autocmd BufRead *.css.twig :set ft=css
-
+:autocmd BufWinEnter *.php :TagbarOpen
 
 " Set an orange cursor in insert mode, and a red cursor otherwise.
 if &term =~ "xterm\\|rxvt"
@@ -131,6 +129,7 @@ Bundle 'gmarik/vundle'
 Bundle 'bling/vim-airline'
 Bundle 'scrooloose/nerdtree'
 Bundle 'jistr/vim-nerdtree-tabs'
+Bundle 'majutsushi/tagbar'
 
 Bundle 'tpope/vim-surround'
 Bundle 'scrooloose/syntastic'
@@ -168,6 +167,7 @@ Bundle 'hail2u/vim-css3-syntax'
 Bundle 'StanAngeloff/php.vim'
 Bundle 'demorose/php-getter-setter.vim'
 Bundle 'stephpy/vim-php-cs-fixer'
+Bundle 'vim-php/tagbar-phpctags.vim'
 
 set noautoindent
 filetype off
@@ -208,6 +208,7 @@ nmap <F2> :set nu!<CR>
 "toggle Tree
 nmap <F6> :NERDTreeTabsToggle<CR>
 nmap <F7> :NERDTreeFind<CR>
+nmap <F8> :TagbarToggle<CR>
 
 "search
 " Find occurence
