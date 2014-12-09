@@ -111,8 +111,23 @@ timeout 0.5s git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*
 }
 
 function parse_git_local_state {
-gitLocalCommit=`git log HEAD --not --remotes --simplify-by-decoration --oneline | wc -l`
-if [[ $gitLocalCommit -gt 0 ]]; then echo -n "$IRED!"; fi
+LOCAL=$(git rev-parse @)
+REMOTE=$(git rev-parse @{u})
+BASE=$(git merge-base @ @{u})
+
+if [ $LOCAL = $REMOTE ]; then
+    echo -n "";
+elif [ $LOCAL = $BASE ]; then
+    # Need to pull
+    echo -n "$IYELLOW▼";
+elif [ $REMOTE = $BASE ]; then
+    # Need to push
+    echo -n "$IYELLOW▲";
+else
+    # Diverged
+    echo -n "$IRED↮"
+fi
+
 }
 
 function parse_git_status {
