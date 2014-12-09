@@ -119,10 +119,10 @@ if [ $LOCAL = $REMOTE ]; then
     echo -n "";
 elif [ $LOCAL = $BASE ]; then
     # Need to pull
-    echo -n "$IYELLOW▼";
+    echo -n "$RED▼";
 elif [ $REMOTE = $BASE ]; then
     # Need to push
-    echo -n "$IYELLOW▲";
+    echo -n "$RED▲";
 else
     # Diverged
     echo -n "$IRED↮"
