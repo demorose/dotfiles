@@ -8,9 +8,9 @@ case "$TERM" in
         TERM=rxvt-unicode
         ;;
 esac
-            #############
-            # Set COLOR #
-            #############
+#############
+# Set COLOR #
+#############
 # Reset
 COLOR_OFF='\e[0m'       # Text Reset
 
@@ -88,9 +88,9 @@ if [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
 fi
 
-            #########
-            # START #
-            #########
+#########
+# START #
+#########
 
 if hash xrdb 2>/dev/null; then
     xrdb ~/.Xdefault
@@ -107,50 +107,50 @@ BROWSER=chromium
 #        PS1
 
 function parse_git_branch {
-    timeout 0.5s git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
+timeout 0.5s git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
 }
 
 function parse_git_local_state {
-    gitLocalCommit=`git log HEAD --not --remotes --simplify-by-decoration --oneline | wc -l`
-    if [[ $gitLocalCommit -gt 0 ]]; then echo -n "$IRED!"; fi
+gitLocalCommit=`git log HEAD --not --remotes --simplify-by-decoration --oneline | wc -l`
+if [[ $gitLocalCommit -gt 0 ]]; then echo -n "$IRED!"; fi
 }
 
 function parse_git_status {
-    gitStatus=`timeout 0.5s git status --porcelain`
-    gitRetVal=$?
-    if [ $gitRetVal -ne 0 ]; then
-        return $gitRetVal;
-    fi
-    nodeleted=`echo "$gitStatus" | grep -E "^(D)" | wc -l`
-    noupdated=`echo "$gitStatus" | grep -E "^ (M|D)" | wc -l`
-    nocommitted=`echo "$gitStatus" | grep -E "^(M|A|R|C)" | wc -l`
-    noadded=`echo "$gitStatus" | grep -E "^(\?)" | wc -l`
+gitStatus=`timeout 0.5s git status --porcelain`
+gitRetVal=$?
+if [ $gitRetVal -ne 0 ]; then
+    return $gitRetVal;
+fi
+nodeleted=`echo "$gitStatus" | grep -E "^(D)" | wc -l`
+noupdated=`echo "$gitStatus" | grep -E "^ (M|D)" | wc -l`
+nocommitted=`echo "$gitStatus" | grep -E "^(M|A|R|C)" | wc -l`
+noadded=`echo "$gitStatus" | grep -E "^(\?)" | wc -l`
 
-    if [[ $nocommitted -gt 0 ]]; then echo -n "+"; fi
-    if [[ $noupdated -gt 0 ]]; then echo -n "~"; fi
-    if [[ $nodeleted -gt 0 ]]; then echo -n "-"; fi
-    if [[ $noadded -gt 0 ]]; then echo -n "?"; fi
+if [[ $nocommitted -gt 0 ]]; then echo -n "+"; fi
+if [[ $noupdated -gt 0 ]]; then echo -n "*"; fi
+if [[ $nodeleted -gt 0 ]]; then echo -n "-"; fi
+if [[ $noadded -gt 0 ]]; then echo -n "?"; fi
 }
 
 function get_ip {
-    ip a s  | awk '/inet / {print $2}' | grep -v '127.0.0.1' | head -n 1
+ip a s  | awk '/inet / {print $2}' | grep -v '127.0.0.1' | head -n 1
 }
 
 function test_network {
-    timeout 0.2s ping -q -w 1 -c 1 www.google.fr > /dev/null 2>&1 && echo -ne "$BBLUE" || echo -ne "$BBLACK"
+timeout 0.2s ping -q -w 1 -c 1 www.google.fr > /dev/null 2>&1 && echo -ne "$BBLUE" || echo -ne "$BBLACK"
 }
 
 # To truncate PWD if > 1/3 of screen
 function truncate_pwd
 {
-  newPWD="${PWD/#$HOME/~}"
-  local pwdmaxlen=$((${COLUMNS:-50}/3))
-  if [ ${#newPWD} -gt $pwdmaxlen ]
-  then
-     newPWD="...${newPWD: -$pwdmaxlen}"
-  fi
-  nbFiles=$(ls -1 | wc -l | sed 's: ::g')
-  sizeFiles=$(ls -lah | grep -m 1 total | sed 's/total //')
+    newPWD=`pwd|sed -e "s!$HOME!~!"`
+    local pwdmaxlen=$((${COLUMNS:-70}/3))
+    if [ ${#newPWD} -gt $pwdmaxlen ]
+    then
+        newPWD="...${newPWD: -$pwdmaxlen}"
+    fi
+    nbFiles=$(ls -1 | wc -l | sed 's: ::g')
+    sizeFiles=$(ls -lah | grep -m 1 total | sed 's/total //')
 }
 
 prompt() {
@@ -158,13 +158,13 @@ prompt() {
     RET_SMILEY='$(if [[ $RET = 0 ]]; then echo -ne "\[$GREEN\]"; else echo -ne "\[$RED\]"; fi;)'
     GIT_INFO='$(if [[ ! -z $(parse_git_branch) ]]; then echo -ne "\[$USERCOLOR\]][\[$IYELLOW\]$(parse_git_branch):$(parse_git_status)"$(parse_git_local_state); fi;)'
     IP='$(if [[ ! -z $(get_ip) ]]; then echo -ne "\[$USERCOLOR\]][$(test_network)$(get_ip)"; fi;)'
-   # Waiting for a better design
-   # if [[ -w "${PWD}" ]]; then
-   #     PERM=$BLUE"rw"
-   # else
-   #     PERM=$YELLOW"ro"
-   # fi
-   PERM=''
+    # Waiting for a better design
+    # if [[ -w "${PWD}" ]]; then
+    #     PERM=$BLUE"rw"
+    # else
+    #     PERM=$YELLOW"ro"
+    # fi
+    PERM=''
 
     # If root: red, else: blue
     if [[ $EUID -ne 0 ]]; then
@@ -181,13 +181,13 @@ prompt() {
         PS1=$PS1"\[$BLUE\]\${newPWD}"
         PS1=$PS1"\[$USERCOLOR\]]\n└─[$RET_COLOR\!\[$USERCOLOR\]]─┨"
 
-    # for console of more than 100 col
+        # for console of more than 100 col
     else
         PS1="\n\[$USERCOLOR\]┌[\u]"
 
         PS1=$PS1"[\[$YELLOW\]\t "
 
-            #If over ssh, then add ssh:// on hostname
+        #If over ssh, then add ssh:// on hostname
         if [ -n "$SSH_CLIENT" ]; then
             PS1=$PS1"\[$UBLUE\]ssh://\h"
         else
@@ -211,9 +211,9 @@ PROMPT_COMMAND='RET=$?;truncate_pwd;prompt;'
 # Reset color for command output
 trap 'echo -ne "$COLOR_OFF"' DEBUG
 
-            ###########
-            # ALIASES #
-            ###########
+###########
+# ALIASES #
+###########
 
 #     CONNECTIONS
 alias ssh="ssh -A"
@@ -235,9 +235,9 @@ alias damn='yes | "$BASH" -c "$(history -p !!)"'
 #      OPTIONS
 HISTSIZE=10000
 
-            #############
-            # FUNCTIONS #
-            #############
+#############
+# FUNCTIONS #
+#############
 
 # repeat :
 # usage -> repeat x cmd args
@@ -288,7 +288,7 @@ setBacklight() {
 }
 
 function ssh_tmux() {
-    ssh -A -t "$1" tmux a || ssh -A -t "$1" tmux;
+ssh -A -t "$1" tmux a || ssh -A -t "$1" tmux;
 }
 
 . ~/.local_bashrc
