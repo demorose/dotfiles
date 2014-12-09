@@ -63,6 +63,7 @@ set expandtab
 
 " Pour highlighter la ligne courante (pour mieux se repérer) en bleu :
 set cursorline
+set cursorcolumn
 
 " Pour activer les numéros de lignes dans la marge :
 set number
@@ -75,7 +76,7 @@ set pastetoggle=<F5>
 
 " Toujours laisser des lignes visibles (içi 3) au dessus/en dessous du curseur quand on
 " atteint le début ou la fin de l'écran :
-set scrolloff=3
+set scrolloff=5
 
 " Afficher en permanence la barre d'état (en plus de la barre de commande) :
 set laststatus=2
@@ -100,6 +101,7 @@ set history=50
 :autocmd BufNewFile *.sh,*.bash 0put =\"#!/bin/bash\<nl># -*- coding: utf-8 -*-\<nl>\<nl>\"|$
 :autocmd BufNewFile *.py 0put=\"#!/usr/bin/env python\"|1put=\"# -*- coding: utf-8 -*-\<nl>\<nl>\"|$
 
+" Ouverture de tagbar lors de l'edition d'un .php
 :autocmd BufWinEnter *.php :TagbarOpen
 
 " Set an orange cursor in insert mode, and a red cursor otherwise.
@@ -140,6 +142,8 @@ Bundle 'junegunn/seoul256.vim'
 Bundle 'nanotech/jellybeans.vim'
 Bundle 'morhetz/gruvbox'
 Bundle 'altercation/vim-colors-solarized'
+Bundle 'modess/vim-phpcolors'
+Bundle 'Junza/Spink'
 
 " Git
 Bundle 'tpope/vim-fugitive'
@@ -181,7 +185,7 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 "let g:airline_theme = 'murmur'
 
-colorscheme solarized
+colorscheme up
 
 " Open file in new tab by default
 set switchbuf+=usetab,newtab
@@ -219,10 +223,9 @@ map <Leader>Fc :execute "noautocmd vimgrep /\\<class " . expand("<cword>") . "\\
 map <Leader>Ff :execute "noautocmd vimgrep /\\<function " . expand("<cword>") . "\\>/j **/*" . expand("%:e") <Bar> cw<CR>
 
 " Init vimgrep
-map <Leader>Fg :execute "noautocmd vimgrep //j **/*" . expand("%:e")
+map <Leader>Fg :execute "noautocmd vimgrep //j **/*"
 
-map <Leader>fc /class
-map <Leader>ff /function
+map <Leader>ff /function 
 
 noremap <Up> <NOP>
 noremap <Down> <NOP>
@@ -258,8 +261,10 @@ function! ChangePaste(type, ...)
     silent exe "normal! p"
 endfunction
 
+" Highlight column 80 and 120
 set colorcolumn=80,120
 
+" Reload configuration
 map <Leader>Rc :so $MYVIMRC<CR>
 
 " http://amix.dk/vim/vimrc.html
@@ -295,3 +300,32 @@ command! -range=% RemoveDiacritics call s:RemoveDiacritics(<line1>, <line2>)
 let g:syntastic_enable_sign=1
 let g:syntastic_php_checkers=['php', 'phpcs']
 let g:syntastic_php_phpcs_args="--standard=PSR2 -n --report=csv"
+
+function! DoPrettyXML()
+  " save the filetype so we can restore it later
+  let l:origft = &ft
+  set ft=
+  " delete the xml header if it exists. This will
+  " permit us to surround the document with fake tags
+  " without creating invalid xml.
+  1s/<?xml .*?>//e
+  " insert fake tags around the entire document.
+  " This will permit us to pretty-format excerpts of
+  " XML that may contain multiple top-level elements.
+  0put ='<PrettyXML>'
+  $put ='</PrettyXML>'
+  silent %!xmllint --format -
+  " xmllint will insert an <?xml?> header. it's easy enough to delete
+  " if you don't want it.
+  " delete the fake tags
+  2d
+  $d
+  " restore the 'normal' indentation, which is one extra level
+  " too deep due to the extra tags we wrapped around the document.
+  silent %<
+  " back to home
+  1
+  " restore the filetype
+  exe "set ft=" . l:origft
+endfunction
+command! PrettyXML call DoPrettyXML()
