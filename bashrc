@@ -110,6 +110,11 @@ function parse_git_branch {
     timeout 0.5s git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
 }
 
+function parse_git_local_state {
+    gitLocalCommit=`git log HEAD --not --remotes --simplify-by-decoration --oneline | wc -l`
+    if [[ $gitLocalCommit -gt 0 ]]; then echo -n "$IRED!"; fi
+}
+
 function parse_git_status {
     gitStatus=`timeout 0.5s git status --porcelain`
     gitRetVal=$?
@@ -121,10 +126,10 @@ function parse_git_status {
     nocommitted=`echo "$gitStatus" | grep -E "^(M|A|R|C)" | wc -l`
     noadded=`echo "$gitStatus" | grep -E "^(\?)" | wc -l`
 
-    if [[ $nocommitted -gt 0 ]]; then echo -n " +$nocommitted"; fi
-    if [[ $noupdated -gt 0 ]]; then echo -n " ~$noupdated"; fi
-    if [[ $nodeleted -gt 0 ]]; then echo -n " -$nodeleted"; fi
-    if [[ $noadded -gt 0 ]]; then echo -n " ?$noadded"; fi
+    if [[ $nocommitted -gt 0 ]]; then echo -n "+"; fi
+    if [[ $noupdated -gt 0 ]]; then echo -n "~"; fi
+    if [[ $nodeleted -gt 0 ]]; then echo -n "-"; fi
+    if [[ $noadded -gt 0 ]]; then echo -n "?"; fi
 }
 
 function get_ip {
@@ -151,7 +156,7 @@ function truncate_pwd
 prompt() {
     RET_COLOR='$(if [[ $RET = 0 ]]; then echo -ne "\[$GREEN\]"; else echo -ne "\[$RED\]"; fi;)'
     RET_SMILEY='$(if [[ $RET = 0 ]]; then echo -ne "\[$GREEN\]"; else echo -ne "\[$RED\]"; fi;)'
-    GIT_INFO='$(if [[ ! -z $(parse_git_branch) ]]; then echo -ne "\[$USERCOLOR\]][\[$IYELLOW\]$(parse_git_branch)$(parse_git_status)"; fi;)'
+    GIT_INFO='$(if [[ ! -z $(parse_git_branch) ]]; then echo -ne "\[$USERCOLOR\]][\[$IYELLOW\]$(parse_git_branch):$(parse_git_status)"$(parse_git_local_state); fi;)'
     IP='$(if [[ ! -z $(get_ip) ]]; then echo -ne "\[$USERCOLOR\]][$(test_network)$(get_ip)"; fi;)'
    # Waiting for a better design
    # if [[ -w "${PWD}" ]]; then
