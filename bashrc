@@ -106,58 +106,57 @@ BROWSER=chromium
 
 #        PS1
 
-function parse_git_branch {
-timeout 0.5s git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
+parse_git_branch() {
+    timeout 0.5s git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
 }
 
-function parse_git_local_state {
-LOCAL=$(git rev-parse @)
-REMOTE=$(git rev-parse @{u})
-BASE=$(git merge-base @ @{u})
+parse_git_local_state() {
+    LOCAL=$(git rev-parse @)
+    REMOTE=$(git rev-parse @{u})
+    BASE=$(git merge-base @ @{u})
 
-if [ $LOCAL = $REMOTE ]; then
-    echo -n "";
-elif [ $LOCAL = $BASE ]; then
-    # Need to pull
-    echo -n "$RED▼";
-elif [ $REMOTE = $BASE ]; then
-    # Need to push
-    echo -n "$RED▲";
-else
-    # Diverged
-    echo -n "$IRED↮"
-fi
+    if [ $LOCAL = $REMOTE ]; then
+        echo -n "";
+    elif [ $LOCAL = $BASE ]; then
+        # Need to pull
+        echo -n "$RED▼";
+    elif [ $REMOTE = $BASE ]; then
+        # Need to push
+        echo -n "$RED▲";
+    else
+        # Diverged
+        echo -n "$IRED↮"
+    fi
 
 }
 
-function parse_git_status {
-gitStatus=`timeout 0.5s git status --porcelain`
-gitRetVal=$?
-if [ $gitRetVal -ne 0 ]; then
-    return $gitRetVal;
-fi
-nodeleted=`echo "$gitStatus" | grep -E "^(D)" | wc -l`
-noupdated=`echo "$gitStatus" | grep -E "^ (M|D)" | wc -l`
-nocommitted=`echo "$gitStatus" | grep -E "^(M|A|R|C)" | wc -l`
-noadded=`echo "$gitStatus" | grep -E "^(\?)" | wc -l`
+parse_git_status() {
+    gitStatus=`timeout 0.5s git status --porcelain`
+    gitRetVal=$?
+    if [ $gitRetVal -ne 0 ]; then
+        return $gitRetVal;
+    fi
+    nodeleted=`echo "$gitStatus" | grep -E "^(D)" | wc -l`
+    noupdated=`echo "$gitStatus" | grep -E "^ (M|D)" | wc -l`
+    nocommitted=`echo "$gitStatus" | grep -E "^(M|A|R|C)" | wc -l`
+    noadded=`echo "$gitStatus" | grep -E "^(\?)" | wc -l`
 
-if [[ $nocommitted -gt 0 ]]; then echo -n "+"; fi
-if [[ $noupdated -gt 0 ]]; then echo -n "*"; fi
-if [[ $nodeleted -gt 0 ]]; then echo -n "-"; fi
-if [[ $noadded -gt 0 ]]; then echo -n "?"; fi
+    if [[ $nocommitted -gt 0 ]]; then echo -n "+"; fi
+    if [[ $noupdated -gt 0 ]]; then echo -n "*"; fi
+    if [[ $nodeleted -gt 0 ]]; then echo -n "-"; fi
+    if [[ $noadded -gt 0 ]]; then echo -n "?"; fi
 }
 
-function get_ip {
-ip a s  | awk '/inet / {print $2}' | grep -v '127.0.0.1' | head -n 1
+get_ip() {
+    ip a s  | awk '/inet / {print $2}' | grep -v '127.0.0.1' | head -n 1
 }
 
-function test_network {
-timeout 0.2s ping -q -w 1 -c 1 www.google.fr > /dev/null 2>&1 && echo -ne "$BBLUE" || echo -ne "$BBLACK"
+test_network() {
+    timeout 0.2s ping -q -w 1 -c 1 www.google.fr > /dev/null 2>&1 && echo -ne "$BBLUE" || echo -ne "$BBLACK"
 }
 
 # To truncate PWD if > 1/3 of screen
-function truncate_pwd
-{
+truncate_pwd() {
     newPWD=`pwd|sed -e "s!$HOME!~!"`
     local pwdmaxlen=$((${COLUMNS:-70}/3))
     if [ ${#newPWD} -gt $pwdmaxlen ]
@@ -284,7 +283,7 @@ music_ping() {
 # remind :
 # usage -> remind "a string"
 
-remind(){
+remind() {
     if [ "$#" == "0" ]; then
         echo -e "$PURPLE$(cat ~/.reminder)$COLOR_OFF";
     else
@@ -302,8 +301,8 @@ setBacklight() {
     fi
 }
 
-function ssh_tmux() {
-ssh -A -t "$1" tmux a || ssh -A -t "$1" tmux;
+ssh_tmux() {
+    ssh -A -t "$1" tmux a || ssh -A -t "$1" tmux;
 }
 
 . ~/.local_bashrc
