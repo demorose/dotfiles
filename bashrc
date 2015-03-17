@@ -103,6 +103,8 @@ export PATH=$PATH:~/scripts
 
 EDITOR=/usr/bin/vim
 BROWSER=chromium
+PROMPT_TAG=''
+TAG_COLOR=$BBLUE
 
 #        PS1
 
@@ -189,13 +191,21 @@ prompt() {
     # for console of less than 100 col
     if [[ $COLUMNS -lt 100 ]]; then
 
-        PS1="\n\[$USERCOLOR\]┌[\u]["
+        PS1="\n\[$USERCOLOR\]┌"
+        if [ -n "$PROMPT_TAG" ]; then
+            PS1=$PS1"\[$USERCOLOR\][\[$TAG_COLOR\]$PROMPT_TAG\[$USERCOLOR\]]"
+        fi
+        PS1=$PS1"[\u]"
         PS1=$PS1"\[$BLUE\]\${newPWD}"
         PS1=$PS1"\[$USERCOLOR\]]\n└─[$RET_COLOR\!\[$USERCOLOR\]]─┨"
 
         # for console of more than 100 col
     else
-        PS1="\n\[$USERCOLOR\]┌[\u]"
+        PS1="\n\[$USERCOLOR\]┌"
+        if [ -n "$PROMPT_TAG" ]; then
+            PS1=$PS1"\[$USERCOLOR\][\[$TAG_COLOR\]$PROMPT_TAG\[$USERCOLOR\]]"
+        fi
+        PS1=$PS1"[\u]"
 
         PS1=$PS1"[\[$YELLOW\]\t "
 
@@ -286,6 +296,27 @@ remind() {
         echo -e "$PURPLE$(cat ~/.reminder)$COLOR_OFF";
     else
         echo "$@" >> ~/.reminder;
+    fi
+}
+
+prompt_tag_color() {
+    if [ "$#" == "0" ]; then
+        echo -ne "$TAG_COLOR--"
+    else
+        REGEX="\\033\[[0-9;]*\m"
+        if [[ $1 =~ $REGEX ]]; then
+            TAG_COLOR=$1
+        else
+            echo "$1: invalid argument. Must match $REGEX"
+        fi
+    fi
+}
+
+prompt_tag() {
+    if [ "$#" == "0" ]; then
+        echo $PROMPT_TAG
+    else
+        PROMPT_TAG=$@
     fi
 }
 
