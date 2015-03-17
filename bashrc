@@ -189,7 +189,7 @@ prompt() {
         BUSERCOLOR=$BRED
     fi
     # for console of less than 100 col
-    if [[ $COLUMNS -lt 100 ]]; then
+    if [[ $COLUMNS -lt 100 || $ALWAYS_USE_MINI = true ]]; then
 
         PS1="\n\[$USERCOLOR\]┌"
         if [ -n "$PROMPT_TAG" ]; then
