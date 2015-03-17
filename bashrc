@@ -150,7 +150,11 @@ parse_git_status() {
 }
 
 get_ip() {
-    ip a s  | awk '/inet / {print $2}' | grep -v '127.0.0.1' | head -n 1
+    if hash ip 2> /dev/null; then
+        ip a s  | awk '/inet / {print $2}' | grep -v '127.0.0.1' | head -n 1
+    else
+        ifconfig  | awk '/inet / {print $2}' | sed 's/adr://' | grep -v '127.0.0.1' |head -n 1
+    fi
 }
 
 test_network() {
