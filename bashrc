@@ -108,45 +108,8 @@ TAG_COLOR=$BBLUE
 
 #        PS1
 
-parse_git_branch() {
-    timeout 0.5s git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
-}
-
-parse_git_local_state() {
-    LOCAL=$(git rev-parse @)
-    REMOTE=$(git rev-parse @{u})
-    BASE=$(git merge-base @ @{u})
-
-    if [ $LOCAL = $REMOTE ]; then
-        echo -n "";
-    elif [ $LOCAL = $BASE ]; then
-        # Need to pull
-        echo -n "$RED▼";
-    elif [ $REMOTE = $BASE ]; then
-        # Need to push
-        echo -n "$RED▲";
-    else
-        # Diverged
-        echo -n "$IRED↮"
-    fi
-
-}
-
-parse_git_status() {
-    gitStatus=`timeout 0.5s git status --porcelain`
-    gitRetVal=$?
-    if [ $gitRetVal -ne 0 ]; then
-        return $gitRetVal;
-    fi
-    nodeleted=`echo "$gitStatus" | grep -E "^(D)" | wc -l`
-    noupdated=`echo "$gitStatus" | grep -E "^ (M|D)" | wc -l`
-    nocommitted=`echo "$gitStatus" | grep -E "^(M|A|R|C)" | wc -l`
-    noadded=`echo "$gitStatus" | grep -E "^(\?)" | wc -l`
-
-    if [[ $nocommitted -gt 0 ]]; then echo -n "+"; fi
-    if [[ $noupdated -gt 0 ]]; then echo -n "*"; fi
-    if [[ $nodeleted -gt 0 ]]; then echo -n "-"; fi
-    if [[ $noadded -gt 0 ]]; then echo -n "?"; fi
+git_status() {
+    __git_ps1 | sed 's/ (//' | sed 's/)//'
 }
 
 get_ip() {
@@ -174,7 +137,7 @@ truncate_pwd() {
 prompt() {
     RET_COLOR='$(if [[ $RET = 0 ]]; then echo -ne "\[$GREEN\]"; else echo -ne "\[$RED\]"; fi;)'
     RET_SMILEY='$(if [[ $RET = 0 ]]; then echo -ne "\[$GREEN\]"; else echo -ne "\[$RED\]"; fi;)'
-    GIT_INFO='$(if [[ ! -z $(parse_git_branch) ]]; then echo -ne "\[$USERCOLOR\]][\[$IYELLOW\]$(parse_git_branch):$(parse_git_status)"$(parse_git_local_state); fi;)'
+    GIT_INFO='$(if [[ ! -z $(git_status) ]]; then echo -ne "\[$USERCOLOR\]][\[$IYELLOW\]$(git_status)"; fi;)'
     IP='$(if [[ ! -z $(get_ip) ]]; then echo -ne "\[$USERCOLOR\]][$(test_network)$(get_ip)"; fi;)'
     # Waiting for a better design
     # if [[ -w "${PWD}" ]]; then
