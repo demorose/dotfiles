@@ -101,9 +101,6 @@ set history=50
 :autocmd BufNewFile *.sh,*.bash 0put =\"#!/bin/bash\<nl># -*- coding: utf-8 -*-\<nl>\<nl>\"|$
 :autocmd BufNewFile *.py 0put=\"#!/usr/bin/env python\"|1put=\"# -*- coding: utf-8 -*-\<nl>\<nl>\"|$
 
-" Ouverture de tagbar lors de l'edition d'un .php
-:autocmd BufWinEnter *.php :TagbarOpen
-
 " Set an orange cursor in insert mode, and a red cursor otherwise.
 if &term =~ "xterm\\|rxvt"
     :silent !echo -ne "\033]12;green\007"
