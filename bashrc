@@ -99,6 +99,14 @@ fi
 echo -e "$PURPLE$(cat ~/.reminder)"
 export PATH=$PATH:~/scripts
 
+export GIT_PS1_SHOWDIRTYSTATE=1
+export GIT_PS1_SHOWSTASHSTATE=1
+export GIT_PS1_SHOWUNTRACKEDFILES=1
+export GIT_PS1_SHOWUPSTREAM=verbose
+export GIT_PS1_DESCRIBE_STYLE=branch
+export GIT_PS1_SHOWCOLORHINTS=1
+export GIT_PS1_HIDE_IF_PWD_IGNORED=1
+
 #        VAR
 
 EDITOR=/usr/bin/vim
