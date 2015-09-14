@@ -96,16 +96,11 @@ if hash xrdb 2>/dev/null; then
     xrdb ~/.Xdefault
 fi
 #command fortune | cowsay -f tux
-echo -e "$PURPLE$(cat ~/.reminder)"
-export PATH=$PATH:~/scripts
 
-export GIT_PS1_SHOWDIRTYSTATE=1
-export GIT_PS1_SHOWSTASHSTATE=1
-export GIT_PS1_SHOWUNTRACKEDFILES=1
-export GIT_PS1_SHOWUPSTREAM=verbose
-export GIT_PS1_DESCRIBE_STYLE=branch
-export GIT_PS1_SHOWCOLORHINTS=1
-export GIT_PS1_HIDE_IF_PWD_IGNORED=1
+# Reminder
+echo -e "$PURPLE$(cat ~/.reminder)"
+
+export PATH=$PATH:~/scripts
 
 #        VAR
 
@@ -116,8 +111,21 @@ TAG_COLOR=$BBLUE
 
 #        PS1
 
+# Var for __git_ps1
+
+export GIT_PS1_SHOWDIRTYSTATE=1
+export GIT_PS1_SHOWSTASHSTATE=1
+export GIT_PS1_SHOWUNTRACKEDFILES=1
+export GIT_PS1_SHOWUPSTREAM=verbose
+export GIT_PS1_DESCRIBE_STYLE=branch
+# Only works if __git_ps1 is called from PROMPT_COMMAND
+# export GIT_PS1_SHOWCOLORHINTS=1
+export GIT_PS1_HIDE_IF_PWD_IGNORED=1
+
+ALWAYS_USE_MINI=false
+
 git_status() {
-    __git_ps1 | sed 's/ (//' | sed 's/)//'
+    __git_ps1 "%s"
 }
 
 get_ip() {
@@ -129,16 +137,18 @@ get_ip() {
 }
 
 test_network() {
-    timeout 0.2s ping -q -w 1 -c 1 www.google.fr > /dev/null 2>&1 && echo "$BBLUE" || echo "$BBLACK"
+    NETWORK_OK=$BBLUE
+    NETWORK_KO=$BBLACK
+    timeout 0.2s ping -q -w 1 -c 1 www.google.fr > /dev/null 2>&1 && echo "$NETWORK_OK" || echo "$NETWORK_KO"
 }
 
-# To truncate PWD if > 1/3 of screen
+# To truncate PWD if ~> 1/3 of screen
 truncate_pwd() {
     newPWD=`pwd|sed -e "s!$HOME!~!"`
-    local pwdmaxlen=$((${COLUMNS:-70}/3))
+    local pwdmaxlen=$((${COLUMNS:-100}/3))
     if [ ${#newPWD} -gt $pwdmaxlen ]
     then
-        newPWD="...${newPWD: -$pwdmaxlen}"
+        newPWD="...${newPWD:-$pwdmaxlen}"
     fi
 }
 
@@ -217,12 +227,12 @@ alias ssh="ssh -A"
 
 #      UTILITIES
 alias ls="ls --color=auto"
+alias l='ls'
 alias ll='ls -l'
 alias la='ls -a'
+alias lla='ls -a -l'
 alias ..='cd ..'
 alias cd..='cd ..'
-alias l='ls'
-alias lla='ls -a -l'
 alias vi='vim'
 alias top='htop'
 alias lt='tty-clock -s -r; vlock'
@@ -295,15 +305,16 @@ prompt_tag() {
     fi
 }
 
-setBacklight() {
-    if [ "$#" == "0" ]; then
-        echo "need one argument"
-    else
-        k_lvl="/sys/class/leds/samsung::kbd_backlight/brightness"
-        sudo chmod 666 $k_lvl
-        echo $1 > $k_lvl
-    fi
-}
+# Specific to one computer.
+#setBacklight() {
+#    if [ "$#" == "0" ]; then
+#        echo "need one argument"
+#    else
+#        k_lvl="/sys/class/leds/samsung::kbd_backlight/brightness"
+#        sudo chmod 666 $k_lvl
+#        echo $1 > $k_lvl
+#    fi
+#}
 
 ssh_tmux() {
     ssh -A -t "$1" tmux a || ssh -A -t "$1" tmux;
