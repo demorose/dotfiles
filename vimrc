@@ -7,8 +7,6 @@ set t_Co=256
 " Coloration syntaxique, indispensable pour ne pas se perdre dans les longs fichiers
 syntax on
 
-set background=light
-
 "Détection du type de fichier pour l'indentation
 if has("autocmd")
     filetype indent on
@@ -33,9 +31,6 @@ set showcmd
 " Déplace le curseur au fur et a mesure qu'on tape une recherche, pas toujours pratique, j'ai abandonné
 set incsearch
 
-" A utiliser en live, paste désactive l'indentation automatique (entre autre) et nopaste le contraire
-set nopaste
-
 " Indiquer le nombre de modification lorsqu'il y en a plus de 0 suite à une commande
 set report=0
 
@@ -45,9 +40,7 @@ set hlsearch
 " Laisse les lignes déborder de l'écran si besoin
 set nowrap
 
-
 " Spécial développeurs
-"
 " Indispensable pour ne pas tout casser avec ce qui va suivre
 set preserveindent
 " Largeur de l'autoindentation
@@ -66,10 +59,13 @@ set cursorline
 set cursorcolumn
 
 " Pour activer les numéros de lignes dans la marge :
-set number
+set relativenumber
 
 " Utilise shiftwidth à la place de tabstop en début de ligne (et backspace supprime d'un coup si ce sont des espaces)
 set smarttab
+
+" A utiliser en live, paste désactive l'indentation automatique (entre autre) et nopaste le contraire
+set nopaste
 
 " On peut passer rapidement du mode paste au mode nopaste avec un raccourcis,
 set pastetoggle=<F5>
@@ -86,9 +82,6 @@ set statusline=%<%f%m\ %r\ %h\ %w%=%l,%c\ %p%%
 
 " Permettre l'utilisation de la touche backspace dans tous les cas :
 set backspace=2
-
-" Envoyer le curseur sur la ligne suivante/précédente après usage des flèches droite/gauche en bout de ligne :
-set whichwrap=<,>,[,]
 
 " Tenter de rester toujours sur la même colonne lors de changements de lignes :
 set nostartofline
@@ -128,25 +121,18 @@ Bundle 'gmarik/vundle'
 Bundle 'bling/vim-airline'
 Bundle 'scrooloose/nerdtree'
 Bundle 'jistr/vim-nerdtree-tabs'
-Bundle 'majutsushi/tagbar'
 
 Bundle 'tpope/vim-surround'
 Bundle 'scrooloose/syntastic'
 
 " ColorScheme
 Bundle 'demorose/up.vim'
-Bundle 'junegunn/seoul256.vim'
-Bundle 'nanotech/jellybeans.vim'
-Bundle 'morhetz/gruvbox'
-Bundle 'altercation/vim-colors-solarized'
-Bundle 'modess/vim-phpcolors'
-Bundle 'Junza/Spink'
 
 " Git
 Bundle 'tpope/vim-fugitive'
 Bundle 'airblade/vim-gitgutter'
 
-Bundle 'tobyS/skeletons.vim'
+" Autocomplete
 Bundle 'SirVer/ultisnips'
 Bundle 'honza/vim-snippets'
 Bundle 'DrawIt'
@@ -154,7 +140,6 @@ Bundle 'DrawIt'
 " Javascript
 Bundle 'maksimr/vim-jsbeautify'
 Bundle 'einars/js-beautify'
-Bundle 'Delapouite/vim-javascript-syntax'
 Bundle 'pangloss/vim-javascript'
 
 " HTML
@@ -172,7 +157,6 @@ Bundle 'vim-php/tagbar-phpctags.vim'
 
 set noautoindent
 filetype off
-filetype indent on
 filetype plugin indent on
 
 if !exists('g:airline_symbols')
@@ -197,8 +181,6 @@ let g:nerdtree_tabs_open_on_console_startup=1
 " autocmd BufWritePre * :%s/\s\+$//e
 nmap <Leader>Cts :%s/\s\+$//e <CR>
 
-"nmap <Leader>Cnc :%s///e <Bar> retab <Bar> %s/\s\+$//e <CR>
-
 " W to write as root
 " command! is used to overwrite W if it exists.
 command! W :execute ':silent w !sudo tee % > /dev/null' | :edit!
@@ -209,7 +191,6 @@ nmap <F2> :set nu!<CR>
 "toggle Tree
 nmap <F6> :NERDTreeTabsToggle<CR>
 nmap <F7> :NERDTreeFind<CR>
-nmap <F8> :TagbarToggle<CR>
 
 "search
 " Find occurence
@@ -218,12 +199,12 @@ map <Leader>Fo :execute "noautocmd vimgrep /\\<" . expand("<cword>") . "\\>/j **
 map <Leader>Fc :execute "noautocmd vimgrep /\\<class " . expand("<cword>") . "\\>/j **/*" . expand("%:e") <Bar> cw<CR>
 " Find function
 map <Leader>Ff :execute "noautocmd vimgrep /\\<function " . expand("<cword>") . "\\>/j **/*" . expand("%:e") <Bar> cw<CR>
-
 " Init vimgrep
 map <Leader>Fg :execute "noautocmd vimgrep //j **/*"
-
+" Find function in file
 map <Leader>ff /function 
 
+" Disable arrow
 noremap <Up> <NOP>
 noremap <Down> <NOP>
 noremap <Left> <NOP>
@@ -231,10 +212,12 @@ noremap <Right> <NOP>
 
 "set swap directory
 "set directory=~/.vim/swap
+set noswapfile
 
 "Remove highlight with F3
 map <F3> :nohl <CR>
 
+" Copy and paste from system clipboard
 set clipboard=unnamedplus
 
 " Make naughty characters visible...
@@ -268,7 +251,6 @@ map <Leader>Rc :so $MYVIMRC<CR>
 set lazyredraw
 set nobackup
 set nowb
-set noswapfile
 
 " Ultisnip
 let g:UltiSnipsUsePythonVersion = 2
@@ -299,30 +281,22 @@ let g:syntastic_php_checkers=['php', 'phpcs']
 let g:syntastic_php_phpcs_args="--standard=PSR2 -n --report=csv"
 
 function! DoPrettyXML()
-  " save the filetype so we can restore it later
   let l:origft = &ft
   set ft=
-  " delete the xml header if it exists. This will
-  " permit us to surround the document with fake tags
-  " without creating invalid xml.
   1s/<?xml .*?>//e
-  " insert fake tags around the entire document.
-  " This will permit us to pretty-format excerpts of
-  " XML that may contain multiple top-level elements.
   0put ='<PrettyXML>'
   $put ='</PrettyXML>'
   silent %!xmllint --format -
-  " xmllint will insert an <?xml?> header. it's easy enough to delete
-  " if you don't want it.
-  " delete the fake tags
   2d
   $d
-  " restore the 'normal' indentation, which is one extra level
-  " too deep due to the extra tags we wrapped around the document.
   silent %<
-  " back to home
   1
-  " restore the filetype
   exe "set ft=" . l:origft
 endfunction
+
 command! PrettyXML call DoPrettyXML()
+
+autocmd FocusLost * :set number
+autocmd FocusGained * :set relativenumber
+autocmd InsertEnter * :set number
+autocmd InsertLeave * :set relativenumber
