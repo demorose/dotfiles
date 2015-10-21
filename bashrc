@@ -125,7 +125,9 @@ export GIT_PS1_HIDE_IF_PWD_IGNORED=1
 ALWAYS_USE_MINI=false
 
 git_status() {
-    __git_ps1 "%s"
+    if hash __git_ps1 2>/dev/null; then
+        __git_ps1 "%s"
+    fi
 }
 
 get_ip() {
