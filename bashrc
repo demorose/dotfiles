@@ -100,8 +100,6 @@ fi
 # Reminder
 echo -e "$PURPLE$(cat ~/.reminder)"
 
-export PATH=$PATH:~/scripts
-
 #        VAR
 
 EDITOR=/usr/bin/vim
@@ -182,7 +180,7 @@ prompt() {
         if [ -n "$PROMPT_TAG" ]; then
             PS1=$PS1"\[$USERCOLOR\][\[$TAG_COLOR\]$PROMPT_TAG\[$USERCOLOR\]]"
         fi
-        PS1=$PS1"[\u]"
+        PS1=$PS1"[\u]["
         PS1=$PS1"\[$BLUE\]\${newPWD}"
         PS1=$PS1"\[$USERCOLOR\]]\n└─[$RET_COLOR\!\[$USERCOLOR\]]─┨"
 
@@ -238,7 +236,7 @@ alias cd..='cd ..'
 alias vi='vim'
 alias top='htop'
 alias lt='tty-clock -s -r; vlock'
-alias fuck='sudo "$BASH" -c "$(history -p !!)"'
+alias fuck='echo "sudo $(history -p !!)" && read toto && sudo "$BASH" -c "$(history -p !!)"'
 alias damn='yes | "$BASH" -c "$(history -p !!)"'
 
 #      OPTIONS
