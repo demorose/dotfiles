@@ -334,3 +334,8 @@ autocmd FocusLost * :set number
 autocmd FocusGained * :set relativenumber
 autocmd InsertEnter * :set number
 autocmd InsertLeave * :set relativenumber
+
+" tab to switch tab
+" http://allsyed.com/some-useful-vim-mappings/
+nmap <tab> gt
+nmap <s-tab> gT
