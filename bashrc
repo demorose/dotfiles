@@ -237,7 +237,7 @@ alias vi='vim'
 alias top='htop'
 alias lt='tty-clock -s -r; vlock'
 alias fuck='echo "sudo $(history -p !!)" && read toto && sudo "$BASH" -c "$(history -p !!)" && history -s "sudo $(history -p !!)"'
-alias damn='yes | "$BASH" -c "$(history -p !!)" &&  history -s "yes $(history -p !!)"'
+alias damn='yes | "$BASH" -c "$(history -p !!)" &&  history -s "yes | $(history -p !!)"'
 
 #      OPTIONS
 HISTSIZE=10000
