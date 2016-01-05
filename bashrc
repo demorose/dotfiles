@@ -139,7 +139,7 @@ get_ip() {
 test_network() {
     NETWORK_OK=$BBLUE
     NETWORK_KO=$BBLACK
-    timeout 0.2s ping -q -w 1 -c 1 www.google.fr > /dev/null 2>&1 && echo "$NETWORK_OK" || echo "$NETWORK_KO"
+    timeout 0.2s ping -q -w 1 -c 1 ip.leveque.it > /dev/null 2>&1 && echo "$NETWORK_OK" || echo "$NETWORK_KO"
 }
 
 # To truncate PWD if ~> 1/3 of screen
