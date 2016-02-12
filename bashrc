@@ -232,8 +232,9 @@ alias ll='ls -l'
 alias la='ls -a'
 alias lla='ls -a -l'
 alias ..='cd ..'
-alias cd..='cd ..'
 alias vi='vim'
+alias vim-server='vim --servername $(basename "$PWD")'
+alias cd..='cd ..'
 alias top='htop'
 alias lt='tty-clock -s -r; vlock'
 alias fuck='echo "sudo $(history -p !!)" && echo "press any key to continue" && read toto && sudo "$BASH" -c "$(history -p !!)" && history -s "sudo $(history -p !!)"'
@@ -320,4 +321,14 @@ ssh_tmux() {
     ssh -A -t "$1" tmux a || ssh -A -t "$1" tmux;
 }
 
+genpasswd() {
+    local l=$1
+        [ "$l" == "" ] && l=16
+        tr -dc A-Za-z0-9_ < /dev/urandom | head -c ${l} | xargs
+}
+
+# Tron game
+tron() {
+    reset;x=$(($COLUMNS/2)); y=$LINES;unset spacesused[*];declare -a spacesused;xdir=0;ydir=-1;time while true ; do read -s -r -t0.02 -n3 direction ; case "${direction:2:1}" in A) ydir=-1;xdir=0 ;; B)ydir=1;xdir=0 ;; C) ydir=0;xdir=1 ;; D) ydir=0;xdir=-1 ;; esac ; space=$(( $COLUMNS * $y + $x )) ; if [[ "${spacesused[$space]}" == "1" || $x -gt $COLUMNS || $x -lt 0 || $y -gt $LINES || $y -lt 0 ]]; then printf '\033[0;0HBOOM!\n' ; break ; else spacesused[$space]=1 ; fi ; ox=$x; oy=$y ; x=$(( $x + $xdir )) ; y=$(( $y + $ydir )) ; printf "\033[%s;%sH\033[46m \033[0m\033[%s;%sH\033[44m \033[0m\033[0;0H" $y $x $oy $ox ; sleep 0.01 ; done
+}
 . ~/.local_bashrc

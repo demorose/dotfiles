@@ -6,7 +6,8 @@ SCRIPTPATH=`pwd -P`
 popd > /dev/null
 
 echo "install bashrc? [y/N]" && read approv
-if [ $approv = 'Y' ] || [ $approv = 'y' ]; then
+if [ $approv = 'Y'  ] || [  $approv = 'y' ]; then
+    echo 'installing bashrc...'
     mv ~/.bashrc ~/.bashrc.back
     ln -s $SCRIPTPATH/bashrc ~/.bashrc
     touch ~/.local_bashrc
@@ -17,7 +18,8 @@ else
 fi
 
 echo "install vimrc and vundle? [y/N]" && read approv
-if [ $approv = 'Y' ] || [ $approv = 'y' ]; then
+if [ $approv = 'Y'  ] || [  $approv = 'y' ]; then
+    echo 'installing vimrc....'
     mv ~/.vimrc ~/.vimrc.back
     mkdir -p ~/.vim/swap
     ln -s $SCRIPTPATH/vimrc ~/.vimrc
@@ -31,7 +33,8 @@ else
 fi
 
 echo "install Xdefault? [y/N]" && read approv
-if [ $approv = 'Y' ] || [ $approv = 'y' ]; then
+if [ $approv = 'Y'  ] || [  $approv = 'y' ]; then
+    echo 'installing Xdefault...'
     mv ~/.Xdefault ~/.Xdefault.back
     ln -s $SCRIPTPATH/Xdefault ~/.Xdefault
     if hash xrdb 2>/dev/null; then
@@ -42,7 +45,8 @@ else
 fi
 
 echo "install inputrc? [y/N]" && read approv
-if [ $approv = 'Y' ] || [ $approv = 'y' ]; then
+if [ $approv = 'Y'  ] || [  $approv = 'y' ]; then
+    echo 'installing inputrc...'
     mv ~/.inputrc ~/.inputrc.back
     ln -s $SCRIPTPATH/inputrc ~/.inputrc
 else
@@ -51,6 +55,7 @@ fi
 
 echo "install screenrc? [y/N]" && read approv
 if [ $approv = 'Y' ] || [ $approv = 'y' ]; then
+    echo 'installing screenrc...'
     mv ~/.screenrc ~/.screenrc.back
     ln -s $SCRIPTPATH/screenrc ~/.screenrc
 else
