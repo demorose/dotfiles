@@ -61,3 +61,15 @@ if [ $approv = 'Y' ] || [ $approv = 'y' ]; then
 else
     echo "skiping screenrc"
 fi
+
+echo "install neovim configuration? [y/N]" && read approv
+if [ $approv = 'Y' ] || [ $approv = 'y' ]; then
+    echo 'installing neovim conf...'
+    mkdir -p ~/.config/nvim
+    mv ~/.config/nvim/init.vim ~/.config/nvim/init.vim.back
+    ln -s $SCRIPTPATH/init.vim ~/.config/nvim
+    curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+else
+    echo "skiping neovim"
+fi
+
