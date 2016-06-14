@@ -206,7 +206,7 @@ colorscheme up
 set switchbuf+=usetab,newtab
 
 " mapleader
-let mapleader=","
+let mapleader=" "
 
 " Open NERDTree at startup
 let g:nerdtree_tabs_open_on_console_startup=1
