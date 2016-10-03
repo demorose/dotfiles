@@ -157,7 +157,12 @@ Bundle 'scrooloose/nerdtree'
 Bundle 'jistr/vim-nerdtree-tabs'
 
 Bundle 'tpope/vim-surround'
+Bundle 'tpope/vim-abolish'
 Bundle 'scrooloose/syntastic'
+
+Bundle 'triglav/vim-visual-increment'
+
+Bundle 'kien/ctrlp.vim'
 
 " ColorScheme
 Bundle 'demorose/up.vim'
@@ -286,12 +291,6 @@ set lazyredraw
 set nobackup
 set nowb
 
-" Ultisnip
-let g:UltiSnipsUsePythonVersion = 2
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-
 " Remove diacritical signs from characters in specified range of lines.
 " Examples of characters replaced: á -> a, ç -> c, Á -> A, Ç -> C.
 " Uses substitute so changes can be confirmed.
@@ -310,6 +309,10 @@ function! s:RemoveDiacritics(line1, line2)
 endfunction
 command! -range=% RemoveDiacritics call s:RemoveDiacritics(<line1>, <line2>)
 
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
 let g:syntastic_enable_sign=1
 let g:syntastic_php_checkers=['php', 'phpcs']
 let g:syntastic_php_phpcs_args="--standard=PSR2 -n --report=csv"
@@ -329,6 +332,10 @@ function! DoPrettyXML()
 endfunction
 
 command! PrettyXML call DoPrettyXML()
+ map <Leader>Ixm :call JsBeautify()<cr>
+
+ map <Leader>Ijs :call JsBeautify()<cr>
+
 
 autocmd FocusLost * :set number
 autocmd FocusGained * :set relativenumber
