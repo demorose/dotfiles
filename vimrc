@@ -191,8 +191,7 @@ Bundle 'hail2u/vim-css3-syntax'
 " PHP
 Bundle 'StanAngeloff/php.vim'
 Bundle 'demorose/php-getter-setter.vim'
-Bundle 'stephpy/vim-php-cs-fixer'
-Bundle 'vim-php/tagbar-phpctags.vim'
+" Bundle 'stephpy/vim-php-cs-fixer'
 
 set noautoindent
 filetype off
@@ -314,8 +313,8 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_enable_sign=1
-let g:syntastic_php_checkers=['php', 'phpcs']
-let g:syntastic_php_phpcs_args="--standard=PSR2 -n --report=csv"
+" let g:syntastic_php_checkers=['php', 'phpcs']
+" let g:syntastic_php_phpcs_args="--standard=PSR2 -n --report=csv"
 
 function! DoPrettyXML()
   let l:origft = &ft

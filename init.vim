@@ -48,6 +48,7 @@ call plug#begin()
     Plug 'airblade/vim-gitgutter'
 
     Plug 'demorose/up.vim'
+    Plug 'nightsense/seabird'
 
     Plug 'mattn/emmet-vim'
 call plug#end()
@@ -98,6 +99,7 @@ map <Leader>ff /function
 " W to write as root
 " command! is used to overwrite W if it exists.
 command! W :execute ':silent w !sudo tee % > /dev/null' | :edit!
+"
 
 let g:netrw_liststyle=3
 

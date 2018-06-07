@@ -12,8 +12,10 @@ URxvt.reverseVideo:          false
 URxvt.tintColor:             #ffffff
 URxvt.shading:               100             !trans=100, 0=opaque
 URxvt.fading:                30              !term unfocus
-URxvt.font:                  xft:monospace:pixelsize=11
-URxvt.boldFont:                      9x15bold,xft:Bitstream Vera Sans Mono
+URxvt.font:                  xft:Source\ Code\ Pro\ for\ Powerline:pixelsize=9:antialias=true:hinting=true,\
+                             xft:Ubuntu\ Mono:pixelsize:9:antialias=true:hinting=true,\
+                             xft:DejaVu\ Sans:pixelsize=9,\
+                             -*-unifont-*-*-*-*-*-*-*-*-*-*-*-*
 URxvt.scrollTtyKeypress:             true
 URxvt.scrollBar:             true
 URxvt.scrollBar_floating:    true
@@ -28,7 +30,7 @@ URxvt.colorBD:           white
 !URxvt*borderLess:            true
 !Pour avoir le marquage des urls et les ouvrir avec FF
 URxvt.perl-ext-common: default,matcher,tabbed,vtwheel
-URxvt.urlLauncher: chromium
+URxvt.urlLauncher: firefox
 URxvt.matcher.button: 2
 URxvt.tabbed.tabbar-fg: 2
 URxvt.tabbed.tabbar-bg: 8

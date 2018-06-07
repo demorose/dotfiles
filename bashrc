@@ -102,7 +102,7 @@ echo -e "$PURPLE$(cat ~/.reminder)"
 
 #        VAR
 
-EDITOR=/usr/bin/vim
+EDITOR=/usr/bin/nvim
 BROWSER=chromium
 PROMPT_TAG=''
 TAG_COLOR=$BBLUE
@@ -232,8 +232,7 @@ alias ll='ls -l'
 alias la='ls -a'
 alias lla='ls -a -l'
 alias ..='cd ..'
-alias vi='vim'
-alias vim-server='vim --servername $(basename "$PWD")'
+alias vi='nvim'
 alias cd..='cd ..'
 alias top='htop'
 alias lt='tty-clock -s -r; vlock'
