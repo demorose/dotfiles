@@ -103,7 +103,7 @@ echo -e "$PURPLE$(cat ~/.reminder)"
 #        VAR
 
 EDITOR=/usr/bin/nvim
-BROWSER=chromium
+BROWSER=firefox
 PROMPT_TAG=''
 TAG_COLOR=$BBLUE
 
@@ -211,7 +211,6 @@ prompt() {
         PS1=$PS1"[`temp=$(tty) ; echo ${temp:5}`:\[$BLUE\]\!\[$USERCOLOR\]]─┨\[$USERCOLOR\]"
     fi
 }
-
 # Retrive return value, truncate pwd, Responsive prompt
 PROMPT_COMMAND='RET=$?;truncate_pwd;prompt;'
 
@@ -236,11 +235,12 @@ alias vi='nvim'
 alias cd..='cd ..'
 alias top='htop'
 alias lt='tty-clock -s -r; vlock'
-alias fuck='echo "sudo $(history -p !!)" && echo "press any key to continue" && read toto && sudo "$BASH" -c "$(history -p !!)" && history -s "sudo $(history -p !!)"'
+eval $(thefuck --alias)
 alias damn='yes | "$BASH" -c "$(history -p !!)" &&  history -s "yes | $(history -p !!)"'
 
 #      OPTIONS
 HISTSIZE=10000
+shopt -s histappend
 
 #############
 # FUNCTIONS #
@@ -305,17 +305,6 @@ prompt_tag() {
     fi
 }
 
-# Specific to one computer.
-#setBacklight() {
-#    if [ "$#" == "0" ]; then
-#        echo "need one argument"
-#    else
-#        k_lvl="/sys/class/leds/samsung::kbd_backlight/brightness"
-#        sudo chmod 666 $k_lvl
-#        echo $1 > $k_lvl
-#    fi
-#}
-
 ssh_tmux() {
     ssh -A -t "$1" tmux a || ssh -A -t "$1" tmux;
 }
@@ -331,3 +320,5 @@ tron() {
     reset;x=$(($COLUMNS/2)); y=$LINES;unset spacesused[*];declare -a spacesused;xdir=0;ydir=-1;time while true ; do read -s -r -t0.02 -n3 direction ; case "${direction:2:1}" in A) ydir=-1;xdir=0 ;; B)ydir=1;xdir=0 ;; C) ydir=0;xdir=1 ;; D) ydir=0;xdir=-1 ;; esac ; space=$(( $COLUMNS * $y + $x )) ; if [[ "${spacesused[$space]}" == "1" || $x -gt $COLUMNS || $x -lt 0 || $y -gt $LINES || $y -lt 0 ]]; then printf '\033[0;0HBOOM!\n' ; break ; else spacesused[$space]=1 ; fi ; ox=$x; oy=$y ; x=$(( $x + $xdir )) ; y=$(( $y + $ydir )) ; printf "\033[%s;%sH\033[46m \033[0m\033[%s;%sH\033[44m \033[0m\033[0;0H" $y $x $oy $ox ; sleep 0.01 ; done
 }
 . ~/.local_bashrc
+
+complete -C /usr/bin/terraform terraform
